@@ -1,4 +1,5 @@
 <?php
+namespace iutnc\netvod\video\episode;
 class Episode {
     private int $numero;
     private string $titre;
