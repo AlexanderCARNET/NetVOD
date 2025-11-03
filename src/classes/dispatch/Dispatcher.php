@@ -2,6 +2,7 @@
 
 namespace iutnc\netvod\dispatch;
 
+use iutnc\netvod\action\Action_noter;
 
 
 class Dispatcher
@@ -19,7 +20,9 @@ class Dispatcher
         $html = '';
 
         switch ($this->action) {
-           
+           default:
+               $avis = new Action_noter();
+               $html = $avis->execute();
 
 
 
