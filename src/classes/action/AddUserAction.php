@@ -18,6 +18,8 @@ class AddUserAction extends Action {
 
                 <label for="password">Mot de passe :</label>
                 <input type="password" id="password" name="password" required><br>
+                  <label for="password">Confirmation mot de passe :</label>
+                <input type="password" id="conf_pass" name="conf_pass" required><br>
 
                 <button type="submit">Créer le compte</button>
             </form>
@@ -28,10 +30,11 @@ class AddUserAction extends Action {
         elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
             $password = $_POST['password'] ?? '';
+            $conf_pass = $_POST['conf_pass'] ?? '';
 
             try {
                 // Tentative d'enregistrer l'utilisateur
-                AuthnProvider::register($email, $password);
+                AuthnProvider::register($email, $password, $conf_pass);
                 return "<p>Inscription réussie pour $email. Vous pouvez maintenant vous connecter.</p>";
             } catch (AuthnException $e) {
                 // La gestion des cas d'erreurs est prise en charge dans la classe AuthnProvider

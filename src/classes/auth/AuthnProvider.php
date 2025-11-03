@@ -28,12 +28,16 @@ class AuthnProvider {
     }
 
     // Méthode permettant de créer un compte
-    public static function register(string $email, string $password): void {
+    public static function register(string $email, string $password, string $conf_pass): void {
         $repo = Repository::getInstance();
         $pdo = $repo->getPDO();
 
         if (!$pdo) {
             throw new AuthnException("Connexion à la base de données impossible.");
+        }
+
+        if($password !== $conf_pass) {
+            throw new AuthnException("Les mots de passe ne correspondent pas.");
         }
 
         if (strlen($password) < 10) {

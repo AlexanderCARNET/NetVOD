@@ -54,6 +54,19 @@ class Dispatcher
 
 private function renderPage(string $html): void
 {
+
+        if (isset($_SESSION['user'])) {
+        $email = $_SESSION['user']['email'];
+        $topLinks = <<<HTML
+            <a href="?action=user-stats">Profil</a> 
+            <a href="?action=logout">Déconnexion</a>
+        HTML;
+    } else {
+        $topLinks = <<<HTML
+            <a href="?action=signin">Connexion</a> 
+            <a href="?action=signup">Inscription</a>
+        HTML;
+    }
    
     $fullPage = <<<HTML
 <!DOCTYPE html>
@@ -63,9 +76,8 @@ private function renderPage(string $html): void
     <link rel="stylesheet" href="style.css" />
     <title>netvod</title>
     <a href ="?action=default">Accueil</a>
-    <a href ="?action=signin">Connexion</a>
-    <a href ="?action=signup">Inscription</a>
-    <a href ="?action=logout">Déconnexion</a>
+    $topLinks;
+
 </head>
 <body>
 $html
