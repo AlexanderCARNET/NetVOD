@@ -3,7 +3,6 @@
 
 
 namespace iutnc\netvod\repository;
-session_start();
 
 use PDO;
 use DateTime;

@@ -1,12 +1,14 @@
 <?php
 
+
 namespace iutnc\netvod\dispatch;
 
-use iutnc\netvod\action\Action;
 
 use iutnc\netvod\action\SigninAction;
+use iutnc\netvod\action\AddUserAction;
 
 
+session_start();
 
 class Dispatcher
 {
@@ -24,10 +26,18 @@ class Dispatcher
 
         switch ($this->action) {
 
+            case 'default':
+                $html = "<p>Bienvenue sur NetVOD ! Veuillez vous connecter ou vous inscrire.</p>";
+                break;
             case 'signin':
                 $action = new SigninAction();
                 $html = $action->execute();
                 break;
+            case 'signup':
+                $action = new AddUserAction();
+                $html = $action->execute();
+                break;
+        
            
 
 
@@ -47,12 +57,12 @@ private function renderPage(string $html): void
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css" />
     <title>netvod</title>
+    <a href ="?action=default">Accueil</a>
+    <a href ="?action=signin">Connexion</a>
+    <a href ="?action=signup">Inscription</a>
 </head>
-
 <body>
-
 $html
-
 </body>
 </html>
 HTML;

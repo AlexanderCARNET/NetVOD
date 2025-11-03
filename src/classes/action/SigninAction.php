@@ -1,6 +1,7 @@
 <?php
 
 namespace iutnc\netvod\action;
+use iutnc\netvod\auth\AuthnProvider;
 
 class SigninAction extends Action {
 
@@ -17,6 +18,17 @@ class SigninAction extends Action {
             HTML;
             return $html;
         } else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = filter_var($_POST['username'], FILTER_SANITIZE_EMAIL);
+            $password = $_POST['password'] ?? '';
+
+            $user = AuthnProvider::signin($email, $password);
+
+            $_SESSION['user'] = $user;
+
+            return '<p>Connexion réussie. Bienvenue, ' . htmlspecialchars($user['email']) . '!</p>';
+
+
+
         }
         else {
             return '<p>Méthode non supportée</p>';

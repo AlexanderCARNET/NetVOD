@@ -1,8 +1,9 @@
 <?php
 namespace iutnc\netvod\auth;
 
-use iutnc\netvod\exception\AuthnException;
+use iutnc\netvod\exception\AuthnException; 
 use iutnc\netvod\repository\Repository;
+
 
 class AuthnProvider {
 
@@ -11,11 +12,11 @@ class AuthnProvider {
         $repo = Repository::getInstance();
         $pdo = $repo->getPDO();
 
-        $stmt = $pdo->prepare("SELECT id, email, passwd, role FROM user WHERE email = ?");
+        $stmt = $pdo->prepare("SELECT id, email, password, role FROM user WHERE email = ?");
         $stmt->execute([$email]);
         $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        if (!$row || !password_verify($password, $row['passwd'])) {
+        if (!$row || !password_verify($password, $row['password'])) {
             throw new AuthnException("Email ou mot de passe incorrect.");
         }
 
@@ -46,7 +47,7 @@ class AuthnProvider {
         }
         
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-        $insert = $pdo->prepare("INSERT INTO user (email, passwd, role) VALUES (?, ?, 1)");
+        $insert = $pdo->prepare("INSERT INTO user (email, password, role) VALUES (?, ?, 1)");
         $insert->execute([$email, $hashedPassword]);
     }
 
