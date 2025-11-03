@@ -1,6 +1,6 @@
 <?php
 
-namespace iutnc\deefy\dispatch;
+namespace iutnc\netvod\dispatch;
 
 
 
@@ -37,7 +37,7 @@ private function renderPage(string $html): void
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css" />
-    <title>Deefy</title>
+    <title>netvod</title>
 </head>
 
 <body>

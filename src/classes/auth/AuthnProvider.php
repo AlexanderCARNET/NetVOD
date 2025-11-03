@@ -1,14 +1,14 @@
 <?php
-namespace iutnc\deefy\auth;
+namespace iutnc\netvod\auth;
 
-use iutnc\deefy\exception\AuthnException;
-use iutnc\deefy\repository\DeefyRepository;
+use iutnc\netvod\exception\AuthnException;
+use iutnc\netvod\repository\Repository;
 
 class AuthnProvider {
 
     // Méthode permettant de se connecter à un compte
     public static function signin(string $email, string $password): array {
-        $repo = DeefyRepository::getInstance();
+        $repo = Repository::getInstance();
         $pdo = $repo->getPDO();
 
         $stmt = $pdo->prepare("SELECT id, email, passwd, role FROM user WHERE email = ?");
@@ -28,7 +28,7 @@ class AuthnProvider {
 
     // Méthode permettant de créer un compte
     public static function register(string $email, string $password): void {
-        $repo = DeefyRepository::getInstance();
+        $repo = Repository::getInstance();
         $pdo = $repo->getPDO();
 
         if (!$pdo) {

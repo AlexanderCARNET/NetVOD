@@ -1,7 +1,7 @@
 <?php
-namespace iutnc\deefy\auth;
+namespace iutnc\netvod\auth;
 
-use iutnc\deefy\repository\DeefyRepository;
+use iutnc\netvod\repository\Repository;
 
 // Permet la gestion d'autorisations d'un utilisateur et ce qu'il peut faire sur le site
 class Authz {
@@ -31,7 +31,7 @@ public function checkPlaylistOwner(int $playlistId): bool {
         if ($userRole == self::ROLE_ADMIN) {
             return true;
         }
-        $repo = DeefyRepository::getInstance();
+        $repo = Repository::getInstance();
         $pdo = $repo->getPDO();
 
 
