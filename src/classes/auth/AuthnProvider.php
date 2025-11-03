@@ -1,7 +1,6 @@
 <?php
 namespace iutnc\netvod\auth;
 
-use iutnc\netvod\exception\AuthnException;
 use iutnc\netvod\repository\Repository;
 
 class AuthnProvider {
