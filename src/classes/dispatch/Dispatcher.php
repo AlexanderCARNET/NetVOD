@@ -2,7 +2,7 @@
 
 namespace iutnc\netvod\dispatch;
 
-use iutnc\netvod\action\Action_noter;
+use iutnc\netvod\action\Action_displayAvis;use iutnc\netvod\action\Action_noter;
 
 
 class Dispatcher
@@ -20,6 +20,10 @@ class Dispatcher
         $html = '';
 
         switch ($this->action) {
+            case "action-displayAvis":
+                $diaplyAvis = new Action_displayAvis();
+                $html = $diaplyAvis->execute();
+                break;
             default:
                 $avis = new Action_noter();
                 $html = $avis->execute();
