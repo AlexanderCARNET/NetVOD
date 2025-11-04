@@ -20,7 +20,7 @@ class Dispatcher
         $html = '';
 
         switch ($this->action) {
-            case "action-displayAvis":
+            case "action_displayAvis":
                 $diaplyAvis = new Action_displayAvis();
                 $html = $diaplyAvis->execute();
                 break;

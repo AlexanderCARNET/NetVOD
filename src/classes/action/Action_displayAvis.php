@@ -27,7 +27,7 @@ class Action_displayAvis extends Action
         }
 
         //concatenation de tout
-        $res = "";
+        $res = "<h2>Espace commentaires : </h2>";
         foreach($listAvis as $avis){
             $renderer = new RendererAvis($avis);
             $res .= $renderer->render();

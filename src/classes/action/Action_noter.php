@@ -14,7 +14,7 @@ class Action_noter extends Action
         $_SESSION['id_serie'] = 2;
         $_SESSION['user']['id'] = 1;
 
-        echo "Moyenne des notes de la série : " . Action_noter::getNoteMoyenne(2);
+        //echo "Moyenne des notes de la série : " . Action_noter::getNoteMoyenne(2);
 
         //verification si l'utilisateur a deja noter cette série
         $instance = Repository::getInstance();
