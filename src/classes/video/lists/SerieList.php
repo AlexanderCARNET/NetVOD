@@ -45,7 +45,7 @@ abstract class SerieList
      */
     public function delSerie(Serie $s): void
     {
-        for($i=0; $i<$this->nb_series; i++){
+        for($i=0; $i<$this->nb_series; $i++){
             if($this->series[$i]==$s){
                 unset($this->series[$i]);
                 $this->nb_series--;
