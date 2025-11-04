@@ -7,11 +7,14 @@ namespace iutnc\netvod\dispatch;
 use iutnc\netvod\action\SigninAction;
 use iutnc\netvod\action\AddUserAction;
 use iutnc\netvod\action\LogoutAction;
+use iutnc\netvod\action\ActivateAction;
 
 session_start();
 
 class Dispatcher
 {
+
+    
 
     private string $action;
 
@@ -40,6 +43,10 @@ class Dispatcher
                 break;
             case 'logout':
                 $action = new LogoutAction();
+                $html = $action->execute();
+                break;
+            case 'activate':
+                $action = new ActivateAction();
                 $html = $action->execute();
                 break;
         

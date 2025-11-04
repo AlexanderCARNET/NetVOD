@@ -6,9 +6,11 @@ use iutnc\netvod\auth\AuthnProvider;
 use iutnc\netvod\exception\AuthnException;
 
 // Action permettant de gérer l'ajout d'utilisateurs (inscription)
-class AddUserAction extends Action {
+class AddUserAction extends Action
+{
 
-    public function execute(): string {
+    public function execute(): string
+    {
         // Affichage du form pour permettre l'utilisateur de rentrer ses données
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             return <<<HTML
@@ -16,7 +18,7 @@ class AddUserAction extends Action {
                 <label for="email">Email :</label>
                 <input type="email" id="email" name="email" required><br>
 
-                <label for="password">Mot de passe :</label>
+                <label for="password">Mot de passe :</label> 
                 <input type="password" id="password" name="password" required><br>
                   <label for="password">Confirmation mot de passe :</label>
                 <input type="password" id="conf_pass" name="conf_pass" required><br>
@@ -34,8 +36,14 @@ class AddUserAction extends Action {
 
             try {
                 // Tentative d'enregistrer l'utilisateur
-                AuthnProvider::register($email, $password, $conf_pass);
-                return "<p>Inscription réussie pour $email. Vous pouvez maintenant vous connecter.</p>";
+                $token = AuthnProvider::register($email, $password);
+
+                $html = <<<HTML
+    <p>Inscription réussie ! Cliquez sur le lien ci-dessous pour activer votre compte :</p>
+    <a href="?action=activate&token=$token">Activer mon compte</a>
+HTML;
+
+                return $html;
             } catch (AuthnException $e) {
                 // La gestion des cas d'erreurs est prise en charge dans la classe AuthnProvider
                 $msg = $e->getMessage();
@@ -46,7 +54,7 @@ class AddUserAction extends Action {
                     <a href="?action=signup" class="btn">Réessayer</a>
                 </div>
                 HTML;
-            } 
+            }
         }
 
         return "<p>Méthode HTTP non supportée. Utilisez GET ou POST.</p>";
