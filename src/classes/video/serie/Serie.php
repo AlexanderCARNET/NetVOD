@@ -25,4 +25,11 @@ class Serie {
         $this->cheminImage = $cheminImage;
     }
 
+    public function __get($property) {
+        if (property_exists($this, $property)) {
+            return $this->$property;
+        }
+        throw new \Exception("Propriété inexistante: " . $property);
+    }
+
 }
