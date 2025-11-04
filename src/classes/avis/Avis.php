@@ -2,6 +2,8 @@
 
 namespace iutnc\netvod\avis;
 
+use iutnc\netvod\repository\Repository;
+
 class Avis
 {
     private string $commentaire;
@@ -25,5 +27,19 @@ class Avis
     }
     public function getMail(): string{
         return $this->mail;
+    }
+
+    public static function getAvisSerie(int $id_serie){
+        $listAvis = [];
+            //recuperation de tous les avis de la bd
+        $instance = Repository::getInstance();
+        $prepare = $instance->getPDO()->prepare("select email, commentaire, note from avis inner join user on user.id = avis.id_user where id_serie=? ");
+        $prepare->bindParam(1,$id_serie);
+        $prepare->execute();
+        while($row = $prepare->fetch()){
+            $avis = new Avis($row["email"],$row["commentaire"],$row["note"]);
+            array_push($listAvis,$avis);
+        }
+        return $listAvis;
     }
 }
