@@ -7,14 +7,15 @@ class Episode {
     private string $titre;
     private int $duree;
     private string $fileNameImage;
-
+    private string $fileNameVideo;
     private string $resume;
 
-    public function __construct(int $numero, string $titre, int $duree, string $fileNameImage, string $resume) {
+    public function __construct(int $numero, string $titre, int $duree, string $fileNameImage, string $fileNameVideo, string $resume) {
         $this->numero = $numero;
         $this->titre = $titre;
         $this->duree = $duree;
         $this->fileNameImage = $fileNameImage;
+        $this->fileNameVideo = $fileNameVideo;
         $this->resume = $resume;
     }
 
