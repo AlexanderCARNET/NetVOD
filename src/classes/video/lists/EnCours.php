@@ -25,30 +25,63 @@ class EnCours extends SerieList
     }
 
     /**
-     * @param string $titre
+     * @param Serie $serie
      * @param int $n
      * @return void
      */
-    public function setEnCoursSerie(string $titre, int $n):void{
-        foreach ($this->series as $serie){
-            if($serie->__get('titre')===$titre){
-                $this->enCours[$serie->__get('titre')]=$n;
+    public function setEnCoursSerie(Serie $serie, int $n):void{
+        foreach ($this->series as $s){
+            if($s==$serie){
+                $this->enCours[$s->__get('titre')]=$n;
                 return;
             }
         }
     }
 
     /**
-     * @param string $titre
+     * @param Serie $serie
      * @return void
      */
-    public function incrementEnCoursSerie(string $titre):void{
-        foreach ($this->enCours as $serie){
-            if($serie->__get('titre')===$titre){
-                $this->enCours[$serie->__get('titre')]++;
+    public function incrementEnCoursSerie(Serie $serie):void{
+        foreach ($this->enCours as $s){
+            if($s==$serie){
+                $this->enCours[$s->__get('titre')]++;
                 return;
             }
         }
+    }
+
+    /**
+     * @param Serie $serie
+     * @param int|null $n
+     * @return void
+     */
+    public function addSerieEnCours(Serie $serie, ?int $n):void{
+        $this->addSerie($serie);
+        $this->enCours[$serie->__get('titre')]=$n??1;
+    }
+
+    /**
+     * @param Serie $serie
+     * @return void
+     */
+    public function delSerieEnCours(Serie $serie):void{
+        $this->delSerie($serie);
+        unset($this->enCours[$serie->__get('titre')]);
+    }
+
+    /**
+     * @param Serie $serie
+     * @return bool
+     */
+    public function verifierFinSerie(Serie $serie):bool{
+        foreach ($this->series as $s){
+            if($s==$serie)
+                if($s->__get('nb_episodes')==$this->enCours[$s->__get('titre')]){
+                    return true;
+                }
+        }
+        return false;
     }
 
     /**
