@@ -8,11 +8,14 @@ class Episode {
     private int $duree;
     private string $fileNameImage;
 
-    public function __construct(int $numero, string $titre, int $duree, string $fileNameImage) {
+    private string $resume;
+
+    public function __construct(int $numero, string $titre, int $duree, string $fileNameImage, string $resume) {
         $this->numero = $numero;
         $this->titre = $titre;
         $this->duree = $duree;
         $this->fileNameImage = $fileNameImage;
+        $this->resume = $resume;
     }
 
     public function __get($property) {
