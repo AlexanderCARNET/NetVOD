@@ -9,9 +9,21 @@ class Action_noter extends Action
 
     public function execute(): string
     {
+
+        //init de test --------------------------------------------
+        $_SESSION['id_serie'] = 2;
+        $_SESSION['user']['id'] = 1;
+
         echo "Moyenne des notes de la série : " . Action_noter::getNoteMoyenne(2);
+
         //verification si l'utilisateur a deja noter cette série
-        if(false){
+        $instance = Repository::getInstance();
+        $prepare = $instance->getPDO()->prepare("select count(*) from avis where id_user = ? and id_serie = ?");
+        $prepare->bindParam(1, $_SESSION['user']["id"]);
+        $prepare->bindParam(2, $_SESSION['id_serie']);
+        $prepare->execute();
+        $result = $prepare->rowCount();
+        if($result > 0){
             return $this->dejaNotee();
         }
 
@@ -54,10 +66,6 @@ class Action_noter extends Action
         if($note<1 ||$note>5){
             return $this->noteIncorrect();
         }
-
-        //init de test --------------------------------------------
-        $_SESSION['id_serie'] = 2;
-        $_SESSION['user']['id'] = 1;
 
         //enregistrement dans la BD
         $instance = Repository::getInstance();
