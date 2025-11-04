@@ -32,4 +32,9 @@ class Serie {
         throw new \Exception("Propriété inexistante: " . $property);
     }
 
+    public function addEpisode($episode) {
+        $this->liste[] = $episode;
+        $this->nbEpisode = count($this->liste);
+    }
+
 }
