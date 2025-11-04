@@ -13,4 +13,5 @@ class Serie {
     private int $nbEpisode;
     private String $cheminImage;
 
+    
 }
