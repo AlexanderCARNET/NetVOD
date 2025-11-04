@@ -9,6 +9,7 @@ class Action_noter extends Action
 
     public function execute(): string
     {
+        echo "Moyenne des notes de la série : " . Action_noter::getNoteMoyenne(2);
         //verification si l'utilisateur a deja noter cette série
         if(false){
             return $this->dejaNotee();
@@ -93,4 +94,13 @@ class Action_noter extends Action
         HTML;
     }
 
+    public static function getNoteMoyenne(int $id_serie):float{
+        //recupération de la note moyenne de la serie dans la bd
+        $instance = Repository::getInstance();
+        $prepare = $instance->getPDO()->prepare("SELECT ROUND(AVG(note),2) as moy FROM avis WHERE id_serie=?");
+        $prepare->bindValue(1,$id_serie);
+        $prepare->execute();
+        $res = $prepare->fetch();
+        return $res['moy'];
+    }
 }
