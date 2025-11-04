@@ -4,7 +4,7 @@ namespace iutnc\netvod\avis;
 
 use iutnc\netvod\avis\Avis;
 
-class DiaplayAvis
+class RendererAvis
 {
     private Avis $avis;
 
@@ -12,13 +12,14 @@ class DiaplayAvis
         $this->avis = $avis;
     }
 
-    public function display():string{
+    public function render():string{
         $note = $this->avis->getNote();
         $commentaire = $this->avis->getCommentaire();
+        $mail = $this->avis->getMail();
         return <<<HTML
+            <h3>Avis de $mail</h3>
+            <p>Commentaire : $commentaire</p>
             <p>Note : $note</p>
-            <p>Commentaire : </p>
-            <p>$commentaire</p>
         HTML;
     }
 }
