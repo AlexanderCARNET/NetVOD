@@ -3,6 +3,7 @@
 namespace iutnc\netvod\Tris;
 
 use iutnc\netvod\avis\Avis;
+use iutnc\netvod\video\serie\Serie;
 
 class TriNote
 {
@@ -15,7 +16,7 @@ class TriNote
         return [];
     }
 
-    private function triNoteAsc(Avis $a1, Avis $a2):int{
-        return $a1->getNote()<$a2->getNote();
+    private function triNoteAsc(Serie $a1, Serie $a2):int{
+        return $a1->getNoteMoyenne()<$a2->getNoteMoyenne();
     }
 }
