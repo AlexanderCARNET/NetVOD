@@ -89,7 +89,6 @@ private function renderPage(string $html): void
     <title>netvod</title>
     <a href ="?action=default">Accueil</a>
     $topLinks;
-
 </head>
 <body>
 $html
