@@ -9,6 +9,7 @@ use iutnc\netvod\action\AddUserAction;
 use iutnc\netvod\action\LogoutAction;
 use iutnc\netvod\action\ActivateAction;
 use iutnc\netvod\action\ProfilAction;
+use iutnc\netvod\action\ForgettenPasswordAction;
 
 session_start();
 
@@ -54,6 +55,10 @@ class Dispatcher
                 $action = new ProfilAction();
                 $html = $action->execute();
                 break;
+            case 'forgotten_password':
+                $action = new ForgettenPasswordAction();
+                $html = $action->execute();
+                break;  
         
            
 
