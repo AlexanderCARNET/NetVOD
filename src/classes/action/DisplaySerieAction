@@ -19,6 +19,9 @@ class DisplayCatalogueAction extends Action {
                 </div>
             HTML;
         }
+
+        
+
     }
 }
 

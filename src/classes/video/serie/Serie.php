@@ -13,5 +13,16 @@ class Serie {
     private int $nbEpisode;
     private String $cheminImage;
 
-    
+    public function __construct(String $genre, String $typePublic, Array $liste, String $titre, String $descriptif, int $annee, String $dateAjout, int $nbEpisode, String $cheminImage) {
+        $this->genre = $genre;
+        $this->typePublic = $typePublic;
+        $this->liste = $liste;
+        $this->titre = $titre;
+        $this->descriptif = $descriptif;
+        $this->annee = $annee;
+        $this->dateAjout = $dateAjout;
+        $this->nbEpisode = $nbEpisode;
+        $this->cheminImage = $cheminImage;
+    }
+
 }
