@@ -24,6 +24,37 @@ abstract class SerieList
     }
 
     /**
+     * @param Serie $serie
+     * @return void
+     */
+    public function addSerie(Serie $s):void{
+        $res=true;
+        foreach ($this->series as $serie)
+            if($serie==$s){
+                $res=false;
+            }
+        if($res){
+            $this->series[]=$s;
+            $this->nb_series++;
+        }
+    }
+
+    /**
+     * @param string $titre
+     * @return void
+     */
+    public function delSerie(Serie $s): void
+    {
+        for($i=0; $i<$this->nb_series; i++){
+            if($this->series[$i]==$s){
+                unset($this->series[$i]);
+                $this->nb_series--;
+                return;
+            }
+        }
+    }
+
+    /**
      * @param string $at
      * @return mixed
      */
