@@ -20,10 +20,9 @@ class Dispatcher
         $html = '';
 
         switch ($this->action) {
-           default:
-               $avis = new Action_noter();
-               $html = $avis->execute();
-
+            default:
+                $avis = new Action_noter();
+                $html = $avis->execute();
 
 
         }
@@ -31,10 +30,10 @@ class Dispatcher
         $this->renderPage($html);
     }
 
-private function renderPage(string $html): void
-{
-   
-    $fullPage = <<<HTML
+    private function renderPage(string $html): void
+    {
+
+        $fullPage = <<<HTML
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -51,8 +50,9 @@ $html
 </html>
 HTML;
 
-    echo $fullPage;
+        echo $fullPage;
+    }
 }
-}
+
 ?>
 
