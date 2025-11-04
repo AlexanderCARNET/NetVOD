@@ -1,5 +1,5 @@
 <?php
-namespace iutnc\deefy\render;
+namespace iutnc\netvod\render;
 interface Renderer{
     public const COMPACT = 1;
     const LONG = 2;
