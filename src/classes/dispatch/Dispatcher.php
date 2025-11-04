@@ -8,6 +8,7 @@ use iutnc\netvod\action\SigninAction;
 use iutnc\netvod\action\AddUserAction;
 use iutnc\netvod\action\LogoutAction;
 use iutnc\netvod\action\ActivateAction;
+use iutnc\netvod\action\ProfilAction;
 
 session_start();
 
@@ -49,6 +50,10 @@ class Dispatcher
                 $action = new ActivateAction();
                 $html = $action->execute();
                 break;
+            case 'profil':
+                $action = new ProfilAction();
+                $html = $action->execute();
+                break;
         
            
 
@@ -65,7 +70,7 @@ private function renderPage(string $html): void
         if (isset($_SESSION['user'])) {
         $email = $_SESSION['user']['email'];
         $topLinks = <<<HTML
-            <a href="?action=user-stats">Profil</a> 
+            <a href="?action=profil">Profil</a> 
             <a href="?action=logout">Déconnexion</a>
         HTML;
     } else {

@@ -28,7 +28,10 @@ class AuthnProvider {
         return [
             'id'    => $row['id'],
             'email' => $row['email'],
-            'role'  => $row['role']
+            'role'  => $row['role'],
+            'nom'   => $row['nom'],
+            'prenom' => $row['prenom'],
+            'genre_pref' => $row['genre_pref']
         ];
     }
 

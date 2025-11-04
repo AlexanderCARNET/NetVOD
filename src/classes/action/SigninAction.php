@@ -14,6 +14,8 @@ class SigninAction extends Action {
                 <label for="password">Mot de passe :</label>
                 <input type="password" id="password" name="password" required><br>
                 <input type="submit" value="Se connecter">
+                <input type="submit" value="Mot de passe oublié">
+
             </form>
             HTML;
             return $html;
