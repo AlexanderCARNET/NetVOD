@@ -12,17 +12,17 @@ class Action_noter extends Action
 
         //init de test --------------------------------------------
         $_SESSION['id_serie'] = 2;
-        $_SESSION['user']['id'] = 1;
+        $_SESSION['user']['id'] = 3;
 
         //echo "Moyenne des notes de la série : " . Action_noter::getNoteMoyenne(2);
 
         //verification si l'utilisateur a deja noter cette série
         $instance = Repository::getInstance();
-        $prepare = $instance->getPDO()->prepare("select count(*) from avis where id_user = ? and id_serie = ?");
+        $prepare = $instance->getPDO()->prepare("select count(*) as count from avis where id_user = ? and id_serie = ?");
         $prepare->bindParam(1, $_SESSION['user']["id"]);
         $prepare->bindParam(2, $_SESSION['id_serie']);
         $prepare->execute();
-        $result = $prepare->rowCount();
+        $result = $prepare->fetch()["count"];
         if($result > 0){
             return $this->dejaNotee();
         }
