@@ -55,6 +55,21 @@ abstract class SerieList
     }
 
     /**
+     * Méthode pour vérifier si la série passée en paramètre est présente dans le tableau ou non
+     *
+     * @param Serie $serie
+     * @return bool
+     */
+    public function verifierSerie(Serie $serie):bool{
+        foreach ($this->series as $s){
+            if($s == $serie){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * @param string $at
      * @return mixed
      */
