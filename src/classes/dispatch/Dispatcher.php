@@ -33,6 +33,7 @@ class Dispatcher
         $html = '';
 
         switch ($this->action) {
+<<<<<<< HEAD
 
             case 'default':
                 $action = new DefaultAction();
@@ -72,6 +73,8 @@ class Dispatcher
                 break;
         
            
+=======
+>>>>>>> e6518370a3f454b17e7027b1491bcd0c3ac65bde
 
 
 
