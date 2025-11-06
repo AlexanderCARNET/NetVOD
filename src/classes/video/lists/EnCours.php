@@ -1,14 +1,21 @@
 <?php
 namespace iutnc\netvod\video\lists;
 
+use iutnc\netvod\exception\InvalidName;
+use iutnc\netvod\video\serie\Serie;
+
 /**
- *
+ * Classe per le serie che sono in corso
  */
 class EnCours extends SerieList
 {
+    //tableau qui enregistre l'épisode auquel nous sommes arrivés dans les séries
     private array $enCours=[];
 
     /**
+     * Constructeur qui appelle le constructeur de la classe parente et prend comme paramètre
+     * deux tableaux, un pour les séries et un pour le numéro de l'épisode en cours
+     *
      * @param array $lists
      * @param array $enCours
      */
@@ -27,6 +34,9 @@ class EnCours extends SerieList
     }
 
     /**
+     * Méthode pour insérer/mettre à jour l'information de l'épisode dans lequel on se trouve dans la série passée en paramètre,
+     * toujours si elle est présente dans la liste des séries au cas où elle l'ajoute
+     *
      * @param Serie $serie
      * @param int $n
      * @return void
@@ -42,9 +52,13 @@ class EnCours extends SerieList
                 return;
             }
         }
+        $this->addSerieEnCours($serie, $n);
+        //throw new ...;
     }
 
     /**
+     * Méthode qui augmente la valeur à l'intérieur du tableau des épisodes en cours
+     *
      * @param Serie $serie
      * @return void
      */
@@ -56,6 +70,8 @@ class EnCours extends SerieList
     }
 
     /**
+     * Méthode pour ajouter une série à la liste et l'épisode dans lequel elle/il se trouve
+     *
      * @param Serie $serie
      * @param int|null $n
      * @return void
@@ -70,6 +86,8 @@ class EnCours extends SerieList
     }
 
     /**
+     * Méthode pour supprimer une série et les informations des épisodes
+     *
      * @param Serie $serie
      * @return void
      */
@@ -79,6 +97,8 @@ class EnCours extends SerieList
     }
 
     /**
+     * Méthode pour vérifier si la série est terminée ou non
+     *
      * @param Serie $serie
      * @return bool
      */
@@ -111,6 +131,7 @@ class EnCours extends SerieList
     }
 
     /**
+     * Magic get
      * @param string $at
      * @return mixed
      */
