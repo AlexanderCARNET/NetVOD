@@ -58,7 +58,11 @@ class EnCours extends SerieList
      */
     public function addSerieEnCours(Serie $serie, ?int $n):void{
         $this->addSerie($serie);
-        $this->enCours[$serie->__get('titre')]=$n??1;
+        $titre = $serie->__get('titre');
+        if($n!=null)
+            $this->enCours[$titre]=$n;
+        else
+            $this->enCours[$titre]=1;
     }
 
     /**
