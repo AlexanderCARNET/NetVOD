@@ -1,8 +1,10 @@
 <?php
 namespace iutnc\netvod\video\lists;
 
+use iutnc\netvod\exception\InvalidName;
+
 /**
- *
+ * Classe pour la liste des séries préférées
  */
 class MesPreference extends SerieList
 {
