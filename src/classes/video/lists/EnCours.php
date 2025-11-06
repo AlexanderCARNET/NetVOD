@@ -32,7 +32,11 @@ class EnCours extends SerieList
     public function setEnCoursSerie(Serie $serie, int $n):void{
         foreach ($this->series as $s){
             if($s==$serie){
-                $this->enCours[$s->__get('titre')]=$n;
+                $titre = $s->__get('titre');
+                if($n>0)
+                    $this->enCours[$titre]=$n;
+                else
+                    $this->enCours[$titre]=1;
                 return;
             }
         }
