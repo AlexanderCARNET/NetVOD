@@ -21,7 +21,7 @@ class EnCours extends SerieList
                 $this->enCours[$titre] = $enCours[$titre];
             }
             else{
-                $this->enCours[$serie->__get('titre')]=1;
+                $this->enCours[$titre] = 1;
             }
         }
     }
