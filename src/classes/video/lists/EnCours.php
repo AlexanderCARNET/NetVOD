@@ -85,6 +85,24 @@ class EnCours extends SerieList
     }
 
     /**
+     * Méthode pour obtenir l'épisode où nous nous sommes arrêtés dans la série précédente par paramètre
+     *
+     * @param Serie $serie
+     * @return int
+     */
+    public function getEnCoursSerie(Serie $serie):int{
+        foreach ($this->series as $s){
+            if($s == $serie){
+                $titre = $s->__get('titre');
+                if($this->enCours[$titre]!=null) {
+                    return $this->enCours[$titre];
+                }
+            }
+        }
+        return 0;
+    }
+
+    /**
      * @param string $at
      * @return mixed
      */
