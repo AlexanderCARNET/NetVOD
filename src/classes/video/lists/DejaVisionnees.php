@@ -2,8 +2,10 @@
 
 namespace iutnc\netvod\video\lists;
 
+use iutnc\netvod\exception\InvalidName;
+
 /**
- *
+ * Classe pour la liste des séries déjà vues/terminées
  */
 class DejaVisionnees extends SerieList
 {
