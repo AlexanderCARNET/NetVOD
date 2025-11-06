@@ -42,12 +42,10 @@ class EnCours extends SerieList
      * @param Serie $serie
      * @return void
      */
-    public function incrementEnCoursSerie(Serie $serie):void{
-        foreach ($this->enCours as $s){
-            if($s==$serie){
-                $this->enCours[$s->__get('titre')]++;
-                return;
-            }
+    public function incrementEnCoursSerie(Serie $serie): void {
+        $titre = $serie->__get('titre');
+        if (isset($this->enCours[$titre])) {
+            $this->enCours[$titre]++;
         }
     }
 
