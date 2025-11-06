@@ -15,7 +15,7 @@ class ActivateAction extends Action {
         $repo = Repository::getInstance();
         $pdo = $repo->getPDO();
 
-        $stmt = $pdo->prepare("SELECT id FROM user WHERE activation_token = ?");
+        $stmt = $pdo->prepare("SELECT user_id FROM utilisateur WHERE activation_token = ?");
         $stmt->execute([$token]);
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -23,11 +23,10 @@ class ActivateAction extends Action {
             return '<p>Token invalide ou déjà utilisé.</p>';
         }
 
-        // Activation du compte
         $update = $pdo->prepare(
-            "UPDATE user SET is_active = 1, activation_token = NULL WHERE id = ?"
+            "UPDATE utilisateur SET is_active = 1, activation_token = NULL WHERE user_id = ?"
         );
-        $update->execute([$user['id']]);
+        $update->execute([$user['user_id']]);
 
         return '<p>Votre compte a été activé avec succès ! Vous pouvez maintenant vous connecter.</p>';
     }

@@ -10,6 +10,8 @@ use iutnc\netvod\action\LogoutAction;
 use iutnc\netvod\action\ActivateAction;
 use iutnc\netvod\action\ProfilAction;
 use iutnc\netvod\action\ForgettenPasswordAction;
+use iutnc\netvod\action\SelectProfilAction;
+use iutnc\netvod\action\AddNewProfilAction;
 
 session_start();
 
@@ -59,6 +61,14 @@ class Dispatcher
                 $action = new ForgettenPasswordAction();
                 $html = $action->execute();
                 break;  
+            case 'select_profil':
+                $action = new SelectProfilAction();
+                $html = $action->execute();
+                break;
+            case 'add_new_profil':
+                $action = new AddNewProfilAction();
+                $html = $action->execute();
+                break;
         
            
 

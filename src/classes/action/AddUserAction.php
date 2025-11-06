@@ -11,7 +11,6 @@ class AddUserAction extends Action
 
     public function execute(): string
     {
-        // Affichage du form pour permettre l'utilisateur de rentrer ses données
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             return <<<HTML
             <form method="post" action="?action=signup">
@@ -26,16 +25,12 @@ class AddUserAction extends Action
                 <button type="submit">Créer le compte</button>
             </form>
             HTML;
-        }
-
-        // Si l'utilisateur a appuyé sur le submit du form précédent
-        elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
             $password = $_POST['password'] ?? '';
             $conf_pass = $_POST['conf_pass'] ?? '';
 
             try {
-                // Tentative d'enregistrer l'utilisateur
                 $token = AuthnProvider::register($email, $password);
 
                 $html = <<<HTML
@@ -45,7 +40,6 @@ HTML;
 
                 return $html;
             } catch (AuthnException $e) {
-                // La gestion des cas d'erreurs est prise en charge dans la classe AuthnProvider
                 $msg = $e->getMessage();
 
                 return <<<HTML
@@ -56,7 +50,5 @@ HTML;
                 HTML;
             }
         }
-
-        return "<p>Méthode HTTP non supportée. Utilisez GET ou POST.</p>";
     }
 }

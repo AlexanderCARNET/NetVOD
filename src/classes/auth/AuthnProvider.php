@@ -12,7 +12,7 @@ class AuthnProvider {
         $repo = Repository::getInstance();
         $pdo = $repo->getPDO();
 
-        $stmt = $pdo->prepare("SELECT * FROM user WHERE email = ?");
+        $stmt = $pdo->prepare("SELECT * FROM utilisateur WHERE email = ?");
         $stmt->execute([$email]);
         $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -26,12 +26,8 @@ class AuthnProvider {
 
 
         return [
-            'id'    => $row['id'],
+            'user_id'    => $row['user_id'],
             'email' => $row['email'],
-            'role'  => $row['role'],
-            'nom'   => $row['nom'],
-            'prenom' => $row['prenom'],
-            'genre_pref' => $row['genre_pref']
         ];
     }
 
@@ -48,7 +44,7 @@ class AuthnProvider {
         throw new AuthnException("Le mot de passe doit contenir au moins 10 caractères.");
     }
 
-    $stmt = $pdo->prepare("SELECT email FROM user WHERE email = ?");
+    $stmt = $pdo->prepare("SELECT email FROM utilisateur WHERE email = ?");
     $stmt->execute([$email]);
     if ($stmt->fetch(\PDO::FETCH_ASSOC)) {
         throw new AuthnException("Un compte avec cet email existe déjà.");
@@ -57,10 +53,10 @@ class AuthnProvider {
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
     $token = bin2hex(random_bytes(16)); // Token aléatoire
 
-    $insert = $pdo->prepare(
-        "INSERT INTO user (email, password, role, is_active, activation_token) VALUES (?, ?, 1, 0, ?)"
-    );
-    $insert->execute([$email, $hashedPassword, $token]);
+$insert = $pdo->prepare(
+    "INSERT INTO utilisateur (email, password, is_active, activation_token) VALUES (?, ?, 0, ?)"
+);
+$insert->execute([$email, $hashedPassword, $token]);
 
     // On retourne le token pour pouvoir afficher le lien d'activation
     return $token;

@@ -1,7 +1,6 @@
 <?php
 namespace iutnc\netvod\action;
 
-// Action permettant de gérer la déconnexion d'un utilisateur
 class LogoutAction extends Action
 {
     public function execute(): string
