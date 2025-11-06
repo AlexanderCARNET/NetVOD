@@ -15,8 +15,10 @@ class EnCours extends SerieList
     public function __construct(array $lists, array $enCours){
         parent::__construct($lists);
         foreach ($lists as $serie){
-            if(!empty($enCours[$serie->__get('titre')])){
-                $this->enCours[$serie->get('titre')]=$enCours[$serie->__get('titre')];
+            $titre = $serie->__get('titre');
+            //Je vérifie que l'information se trouve dans le tableau de l'épisode auquel nous sommes de la série
+            if(isset($enCours[$titre])){
+                $this->enCours[$titre] = $enCours[$titre];
             }
             else{
                 $this->enCours[$serie->__get('titre')]=1;
