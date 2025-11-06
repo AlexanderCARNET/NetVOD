@@ -1,21 +1,28 @@
 <?php
 namespace iutnc\netvod\video\lists;
 
+use iutnc\netvod\exception\InvalidName;
+use iutnc\netvod\video\serie\Serie;
+
 /**
- *
+ * Classe abstraite qui servira à la gestion de séries
  */
 abstract class SerieList
 {
-    //
+    //numéro de série dans le tableau
     protected int $nb_series = 0;
-    //
+
+    //tableau de séries
     protected array $series = [];
 
     /**
+     * Constructeur qui prend comme paramètre un tableau et vérifie que le contenu est un objet de type Série
+     *
      * @param array $series
      */
     public function __construct(array $series){
         foreach ($series as $serie) {
+            //Je vérifie s'il s'agit d'un objet de la série
             if($serie instanceof Serie){
             $this->series[] = $serie;
             $this->nb_series++;
@@ -24,12 +31,15 @@ abstract class SerieList
     }
 
     /**
+     * Méthode pour ajouter à un tableau l'objet Série passé en paramètre
+     *
      * @param Serie $serie
      * @return void
      */
     public function addSerie(Serie $s):void{
         $res=true;
         foreach ($this->series as $serie)
+            //je vérifie si elle est déjà présente dans le tableau
             if($serie==$s){
                 $res=false;
             }
@@ -40,6 +50,8 @@ abstract class SerieList
     }
 
     /**
+     * Méthode pour retirer d'un tableau une Série passée en paramètre
+     *
      * @param string $titre
      * @return void
      */
@@ -47,7 +59,9 @@ abstract class SerieList
     {
         for($i=0; $i<$this->nb_series; $i++){
             if($this->series[$i]==$s){
+                //j'enlève la série
                 unset($this->series[$i]);
+                //Je réduis le nombre de séries présentes
                 $this->nb_series--;
                 return;
             }
@@ -70,6 +84,8 @@ abstract class SerieList
     }
 
     /**
+     * Magic get
+     *
      * @param string $at
      * @return mixed
      */
