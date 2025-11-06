@@ -5,13 +5,28 @@ namespace iutnc\netvod\renderer;
 use iutnc\netvod\video\lists\EnCours;
 use iutnc\netvod\video\lists\SerieList;
 
+/**
+ * Classe pour imprimer les informations de la liste de séries
+ */
 class SerieListRenderer implements Renderer
 {
+    //objet de type ListeSérie
     private SerieList $series;
 
+    /**
+     * @param SerieList $series
+     */
     public function __construct(SerieList $series){
         $this->series=$series;
     }
+
+    /**
+     * Méthode qui retourne les informations à afficher à l'écran sur la liste des séries
+     *
+     * @param int|null $t
+     * @return string
+     * @throws \iutnc\netvod\exception\InvalidName
+     */
     public function render(?int $t): string
     {
         $res="<table>";
