@@ -12,6 +12,7 @@ use iutnc\netvod\action\ProfilAction;
 use iutnc\netvod\action\ForgettenPasswordAction;
 use iutnc\netvod\action\SelectProfilAction;
 use iutnc\netvod\action\AddNewProfilAction;
+use iutnc\netvod\action\DefaultAction;
 
 session_start();
 
@@ -34,8 +35,8 @@ class Dispatcher
         switch ($this->action) {
 
             case 'default':
-                $html = "<p>Bienvenue sur NetVOD ! Veuillez vous connecter ou vous inscrire.</p>";
-                $html .= $_SESSION['user']['email'] ?? 'Utilisateur non connecté';
+                $action = new DefaultAction();
+                $html = $action->execute();
                 break;
             case 'signin':
                 $action = new SigninAction();
