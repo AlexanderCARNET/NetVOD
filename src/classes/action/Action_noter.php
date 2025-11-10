@@ -11,14 +11,14 @@ class Action_noter extends Action
     {
 
         //init de test --------------------------------------------
-        $_SESSION['id_serie'] = 2;
-        $_SESSION['user']['id'] = 3;
+        $_SESSION['id_serie'] = 1;
+        $_SESSION['user']['id'] = 4;
 
         //echo "Moyenne des notes de la série : " . Action_noter::getNoteMoyenne(2);
 
         //verification si l'utilisateur a deja noter cette série
         $instance = Repository::getInstance();
-        $prepare = $instance->getPDO()->prepare("select count(*) as count from avis where id_user = ? and id_serie = ?");
+        $prepare = $instance->getPDO()->prepare("select count(*) as count from avisserie where user_id = ? and serie_id = ?");
         $prepare->bindParam(1, $_SESSION['user']["id"]);
         $prepare->bindParam(2, $_SESSION['id_serie']);
         $prepare->execute();
@@ -69,7 +69,7 @@ class Action_noter extends Action
 
         //enregistrement dans la BD
         $instance = Repository::getInstance();
-        $prepare = $instance->getPDO()->prepare("INSERT INTO avis (id_user, id_serie, note, commentaire) VALUES (?,?,?,?)");
+        $prepare = $instance->getPDO()->prepare("INSERT INTO avisserie (user_id, serie_id, note, commentaire) VALUES (?,?,?,?)");
         $prepare->bindValue(1, $_SESSION["user"]["id"]);
         $prepare->bindValue(2, $_SESSION["id_serie"]);
         $prepare->bindValue(3, $note);
