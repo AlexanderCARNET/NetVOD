@@ -122,9 +122,8 @@ class Repository
                 );
                 $serie->addEpisode($episode);
             }
-
-            return $serie;
     }
+    return $serie;
 }
 
 // retourne les libelles d'une série en fonction de son id (liste tout les episodes associés)
