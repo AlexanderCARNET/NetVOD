@@ -33,7 +33,7 @@ class Avis
         $listAvis = [];
             //recuperation de tous les avis de la bd
         $instance = Repository::getInstance();
-        $prepare = $instance->getPDO()->prepare("select email, commentaire, note from avis inner join user on user.id = avis.id_user where id_serie=? ");
+        $prepare = $instance->getPDO()->prepare("select email, commentaire, note from avisserie inner join utilisateur on utilisateur.user_id = avisserie.user_id where serie_id=? ");
         $prepare->bindParam(1,$id_serie);
         $prepare->execute();
         while($row = $prepare->fetch()){

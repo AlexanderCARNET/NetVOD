@@ -12,7 +12,7 @@ class Action_noter extends Action
 
         //init de test --------------------------------------------
         $_SESSION['id_serie'] = 1;
-        $_SESSION['user']['id'] = 4;
+        $_SESSION['user']['id'] = 2;
 
         //echo "Moyenne des notes de la série : " . Action_noter::getNoteMoyenne(2);
 

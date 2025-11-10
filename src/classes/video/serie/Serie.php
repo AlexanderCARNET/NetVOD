@@ -14,7 +14,7 @@ class Serie
     public function getNoteMoyenne():float{
         //recupération de la note moyenne de la serie dans la bd
         $instance = Repository::getInstance();
-        $prepare = $instance->getPDO()->prepare("SELECT ROUND(AVG(note),2) as moy FROM avis WHERE id_serie=?");
+        $prepare = $instance->getPDO()->prepare("SELECT ROUND(AVG(note),2) as moy FROM avisserie WHERE serie_id=?");
         $prepare->bindValue(1,$this->id);
         $prepare->execute();
         $res = $prepare->fetch();
