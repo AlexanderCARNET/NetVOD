@@ -66,6 +66,7 @@ class SelectProfilAction extends Action
         }
 
         $html .= "</form>";
+        $html .= "<a href ='?action=add_new_profil' class='add-profil-link'>Créer un nouveau profil</a>";
         return $html;
     }
 }
