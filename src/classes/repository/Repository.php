@@ -3,13 +3,10 @@
 
 
 namespace iutnc\netvod\repository;
-<<<<<<< HEAD
 
 use iutnc\netvod\video\episode\Episode;
 use iutnc\netvod\video\serie\Serie;
 session_start();
-=======
->>>>>>> 7d1ed8741be9a77a9208197850fdb4ac3b122498
 
 use PDO;
 use DateTime;
