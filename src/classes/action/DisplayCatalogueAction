@@ -2,6 +2,7 @@
 
 namespace iutnc\netvod\action;
 use iutnc\netvod\render\SerieRender;
+use iutnc\netvod\repository\Repository;
 
 //DisplayCatalogue : 
 // si user connecté
@@ -15,7 +16,8 @@ class DisplayCatalogueAction extends Action {
 
     function execute(): string
     {   
-        $series_total = 
+        $repo = Repository::getInstance();
+        $series_total = $repo->getAllSeriesCompact();
         // On suppose que c'est 4 listes différentes
         $cours_serie = $_SESSION['encours']->__get("enCours"); // de type EnCours->Array
         $serie_genre_pref = $_SESSION['preferences']->__get("series"); // de type MesPreference->Array
