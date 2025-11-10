@@ -7,27 +7,25 @@ use DateTimeZone;
 use iutnc\netvod\video\episode\Episode;
 
 class Serie {
-    private String $genre;
-    private String $typePublic;
-    private array $liste;
-    private String $titre;
-    private String $descriptif; 
+    private string $titre;
     private int $annee;
     private DateTime $dateAjout;
+    private array $genre;
+    private array $typePublic;
+    private String $descriptif; 
     private int $nbEpisode;
-    private String $cheminImage;
+    private array $liste;
+    private string $cheminImage;
     private $id;
 
-    public function __construct(String $genre, String $typePublic, String $titre, String $descriptif, int $annee, int $nbEpisode, String $cheminImage, $id = null) {
-        $this->genre = $genre;
-        $this->typePublic = $typePublic;
-        // la liste d'épisode est vide par def
-        $this->liste = [];
+    public function __construct(string $titre,  string $descriptif, int $annee, DateTime $dateAjout, string $cheminImage, $id = null) {
         $this->titre = $titre;
+        $this->genre = [];
+        $this->typePublic = [];
         $this->descriptif = $descriptif;
         $this->annee = $annee;
-        $this->dateAjout = new DateTime("now", new DateTimeZone('Europe/Paris'));
-        $this->nbEpisode = $nbEpisode;
+        $this->dateAjout = $dateAjout;
+        $this->nbEpisode = 0;
         $this->cheminImage = $cheminImage;
         $this->id = $id;
     }
@@ -49,6 +47,14 @@ class Serie {
 
     public function setId($id): void {
         $this->id = $id;
+    }
+
+    public function setGenres(array $genres): void {
+        $this->genre = $genres;
+    }
+
+    public function setTypePublic(array $typePublic): void {
+        $this->typePublic = $typePublic;
     }
 
 
