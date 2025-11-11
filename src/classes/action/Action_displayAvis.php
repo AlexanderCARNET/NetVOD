@@ -12,9 +12,6 @@ class Action_displayAvis extends Action
 
     public function execute(): string
     {
-        //init de test -------------------------------------------
-        $_SESSION['id_serie'] = 1;
-
 
         $listAvis = Avis::getAvisSerie($_SESSION['id_serie']);
 

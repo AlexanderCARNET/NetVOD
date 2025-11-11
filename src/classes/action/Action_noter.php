@@ -10,11 +10,7 @@ class Action_noter extends Action
     public function execute(): string
     {
 
-        //init de test --------------------------------------------
-        $_SESSION['id_serie'] = 1;
-        $_SESSION['user']['id'] = 2;
 
-        //echo "Moyenne des notes de la série : " . Action_noter::getNoteMoyenne(2);
 
         //verification si l'utilisateur a deja noter cette série
         $instance = Repository::getInstance();
