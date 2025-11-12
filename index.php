@@ -7,6 +7,10 @@ require_once __DIR__ . '/src/classes/dispatch/Dispatcher.php';
 use iutnc\netvod\repository\Repository;
 use iutnc\netvod\dispatch\Dispatcher;
 
+if(session_id() == '' || !isset($_SESSION) || session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 try {
     Repository::setConfig(__DIR__ . '/Config.db.ini');
     $repo = Repository::getInstance();
@@ -17,3 +21,5 @@ try {
 } catch (Exception $e) {
     echo "Erreur : " . $e->getMessage();
 }
+
+
