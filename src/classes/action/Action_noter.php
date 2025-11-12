@@ -64,7 +64,7 @@ class Action_noter extends Action
         //enregistrement dans la BD
         $instance = Repository::getInstance();
         $prepare = $instance->getPDO()->prepare("INSERT INTO avisserie (user_id, serie_id, note, commentaire) VALUES (?,?,?,?)");
-        $prepare->bindValue(1, $_SESSION["user"]["id"]);
+        $prepare->bindValue(1, $_SESSION["user"]['user_id']);
         $prepare->bindValue(2, $_SESSION["selected_serie"]->id);
         $prepare->bindValue(3, $note);
         $prepare->bindValue(4, $commentaire);

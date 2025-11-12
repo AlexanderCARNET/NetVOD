@@ -66,11 +66,6 @@ class Dispatcher
             case 'display-episode':
                 $action = new DisplayEpisodeAction();
                 break;
-
-            case "action_displayAvis":
-                $diaplyAvis = new Action_displayAvis();
-                $html = $diaplyAvis->execute();
-                break;
             default:
                 $action = new DefaultAction();
                 break;

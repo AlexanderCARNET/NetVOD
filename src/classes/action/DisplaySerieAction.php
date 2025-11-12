@@ -36,8 +36,13 @@ class DisplaySerieAction extends Action {
             $render =  new SerieRender($serie);
             $res = $render->render(Renderer::LONG);
 
-            //ajout de l'espace commentaire
+            //ajout de l'espace pour noter
+            $form_noter = new Action_noter();
+            $res .= $form_noter->execute();
 
+            //ajout de l'espace commentaire
+            $espaceComm = new Action_displayAvis();
+            $res .= $espaceComm->execute();
 
             return $res;
         }
