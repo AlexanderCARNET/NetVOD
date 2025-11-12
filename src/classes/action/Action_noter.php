@@ -13,8 +13,9 @@ class Action_noter extends Action
         //verification si l'utilisateur a deja noter cette série
         $instance = Repository::getInstance();
         $prepare = $instance->getPDO()->prepare("select count(*) as count from avisserie where user_id = ? and serie_id = ?");
-        $prepare->bindParam(1, $_SESSION['user']["id"]);
-        $prepare->bindParam(2, $_SESSION['id_serie']);
+        $prepare->bindParam(1, $_SESSION['user']["user_id"]);
+        $id = $_SESSION['selected_serie']->id;
+        $prepare->bindParam(2, $id);
         $prepare->execute();
         $result = $prepare->fetch()["count"];
         if($result > 0){
