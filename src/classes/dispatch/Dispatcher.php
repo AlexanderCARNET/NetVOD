@@ -4,6 +4,9 @@
 namespace iutnc\netvod\dispatch;
 
 
+use iutnc\netvod\action\DisplayCatalogueAction;
+use iutnc\netvod\action\DisplayEpisodeAction;
+use iutnc\netvod\action\DisplaySerieAction;
 use iutnc\netvod\action\SigninAction;
 use iutnc\netvod\action\AddUserAction;
 use iutnc\netvod\action\LogoutAction;
@@ -35,7 +38,7 @@ class Dispatcher
         switch ($this->action) {
 
             case 'default':
-                $action = new DefaultAction();
+                $action = new DisplayCatalogueAction();
                 $html = $action->execute();
                 break;
             case 'signin':
@@ -68,6 +71,14 @@ class Dispatcher
                 break;
             case 'add_new_profil':
                 $action = new AddNewProfilAction();
+                $html = $action->execute();
+                break;
+            case 'display-serie':
+                $action = new DisplaySerieAction();
+                $html = $action->execute();
+                break;
+            case 'display-episode':
+                $action = new DisplayEpisodeAction();
                 $html = $action->execute();
                 break;
         
