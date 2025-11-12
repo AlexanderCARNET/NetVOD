@@ -57,19 +57,6 @@ class EnCours extends SerieList
     }
 
     /**
-     * Méthode qui augmente la valeur à l'intérieur du tableau des épisodes en cours
-     *
-     * @param Serie $serie
-     * @return void
-     */
-    public function incrementEnCoursSerie(Serie $serie): void {
-        $titre = $serie->__get('titre');
-        if (isset($this->enCours[$titre])) {
-            $this->enCours[$titre]++;
-        }
-    }
-
-    /**
      * Méthode pour ajouter une série à la liste et l'épisode dans lequel elle/il se trouve
      *
      * @param Serie $serie
@@ -104,10 +91,19 @@ class EnCours extends SerieList
      */
     public function verifierFinSerie(Serie $serie):bool{
         foreach ($this->series as $s){
-            if($s==$serie)
-                if($s->__get('nbEpisode')==$this->enCours[$s->__get('titre')]){
-                    return true;
+            if($s == $serie){
+                $episodes=$serie->__get('liste');
+                $pos_ep=1;
+                $titre = $s->__get('titre');
+                foreach ($episodes as $ep){
+                    if($pos_ep==$this->enCours[$titre]){
+                        if($pos_ep==$s->__get('nbEpisode')){
+                            return true;
+                        }
+                    }
+                    $pos_ep++;
                 }
+            }
         }
         return false;
     }
