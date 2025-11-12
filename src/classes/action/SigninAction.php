@@ -47,8 +47,12 @@ class SigninAction extends Action
     exit();
 } catch (AuthnException $e) {
     $msg = htmlspecialchars($e->getMessage());
-    return "<p><strong>Erreur :</strong> {$msg}</p>
-            <a href='?action=signin'>Réessayer</a>";
+   return "
+    <div class='reset-message'>
+        <p><strong>Erreur :</strong> {$msg}</p>
+        <a href='?action=signin'>Réessayer</a>
+    </div>";
+
 }
 
         }

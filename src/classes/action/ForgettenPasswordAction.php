@@ -69,8 +69,12 @@ class ForgettenPasswordAction extends Action
 
             $url = htmlspecialchars('?action=forgotten_password&token=' . $resetToken);
 
-            return 'Lien de test de réinitialisation :'
-                . '<p><a href="' . $url . '">' . $url . '</a></p>';
+          return '
+    <div class="reset-message">
+        <h2>Lien de test de réinitialisation</h2>
+        <p><a href="' . $url . '">' . $url . '</a></p>
+    </div>';
+
         }
 
         return $this->renderRequestForm();

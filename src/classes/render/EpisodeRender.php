@@ -24,17 +24,27 @@ class EpisodeRender implements Renderer
                 </a>
             </div>";
         } elseif ($selecteur === self::LONG) {
-           $html = "
-            <div class='episode-long'>
-                <h2>" . htmlspecialchars($this->episode->__get('titre')) . "</h2>
-                <h3>Durée : " . $this->episode->__get('duree') . " minutes</h3>
-                <video controls width='640'>
-                    <source src='" . htmlspecialchars($this->episode->__get('fileNameVideo')) . "' type='video/mp4'>
+            $titre = htmlspecialchars($this->episode->__get('titre'));
+            $duree = htmlspecialchars($this->episode->__get('duree'));
+            $resume = htmlspecialchars($this->episode->__get('resume'));
+            $fileVideo = htmlspecialchars($this->episode->__get('fileNameVideo'));
+            
+            $html = "
+            <div class='episode-page'>
+                <h1>$titre</h1>
+                <h2>Durée : $duree minutes</h2>
+
+                <video controls>
+                    <source src='$fileVideo' type='video/mp4'>
                     Votre navigateur ne supporte pas la lecture vidéo.
                 </video>
-                <p><b>Résumé</b> :" . htmlspecialchars($this->episode->__get('resume')) . "</p>
-            </div>";
 
+                <p><strong>Résumé :</strong> $resume</p>
+
+                <div class='episode-actions'>
+                    <a href='?action=display-serie&id_serie=" . $_SESSION['selected_serie']->id . "'>Retour à la série</a>
+                </div>
+            </div>";
         } else {
             throw new \Exception("Sélecteur de rendu inconnu : " . $selecteur);
         }

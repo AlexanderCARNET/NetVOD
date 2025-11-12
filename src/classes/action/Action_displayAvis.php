@@ -16,11 +16,16 @@ class Action_displayAvis extends Action
         $listAvis = Avis::getAvisSerie($_SESSION['selected_serie']->id);
 
         //concatenation de tout
-        $res = "<h2>Espace commentaires : </h2>";
-        foreach($listAvis as $avis){
-            $renderer = new RendererAvis($avis);
-            $res .= $renderer->render();
-        }
+     $res = "<div class='avis-section'><h2>Espace commentaires :</h2>";
+
+foreach($listAvis as $avis) {
+    $renderer = new RendererAvis($avis);
+    $res .= "<div class='avis-card'>";
+    $res .= $renderer->render();
+    $res .= "</div>";
+}
+
+$res .= "</div>";
         return $res;
     }
 }
