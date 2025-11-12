@@ -1,5 +1,5 @@
 <?php
-namespace iutnc\netvod\render;
+namespace iutnc\netvod\renderer;
 
 use iutnc\netvod\video\episode\Episode;
 
