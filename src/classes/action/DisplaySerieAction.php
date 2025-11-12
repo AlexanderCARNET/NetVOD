@@ -2,9 +2,9 @@
 
 namespace iutnc\netvod\action;
 
-use iutnc\netvod\action\Action;
-use iutnc\netvod\render\Renderer;
-use iutnc\netvod\render\SerieRender;
+use iutnc\netvod\renderer\EpisodeRender;
+use iutnc\netvod\renderer\Renderer;
+use iutnc\netvod\renderer\SerieRender;
 use iutnc\netvod\repository\Repository;
 
 // Action gérant l'affichage d'une Série
@@ -33,19 +33,74 @@ class DisplaySerieAction extends Action {
                 HTML;
             }
             $_SESSION['selected_serie'] = $serie;
-            $render =  new SerieRender($serie);
-            $res = $render->render(Renderer::LONG);
 
-            //ajout de l'espace pour noter
-            $form_noter = new Action_noter(Action_noter::$TYPE_SERIE);
-            $res .= $form_noter->execute();
+            if($_SERVER['REQUEST_METHOD']=='POST'){
+                //Je vérifie si la session préférences est présente, dans laquelle l'objet MesPreferences est enregistré.
+                if(isset($_SESSION['preferences'])){
+                    $series=$_SESSION['preferences'];
+                    if(isset($_POST['add-serie'])){
+                        $repo->addPreferences();
+                        $series->addSerie($serie);
+                        $_SESSION['in']=true;
+                    }
+                    else if(isset($_POST['del-serie'])){
+                        $repo->delPreferences();
+                        $series->delSerie($serie);
+                        $_SESSION['in']=false;
+                    }
+                    $_SESSION['preferences']=$series;
+                }
+            }
 
-            //ajout de l'espace commentaire
-            $espaceComm = new Action_displayAvis(Action_displayAvis::$TYPE_SERIE);
-            $res .= $espaceComm->execute();
+            $genres = implode(", ", (array)$serie->__get('genre'));
+            $typePublic = implode(", ", (array)$serie->__get('typePublic'));
 
-            return $res;
+            $res="
+            <div class='serie-long'>
+                <h1>" . htmlspecialchars($serie->__get('titre')) . "</h1>
+                <h2>Année : " . $serie->__get('annee') . " -
+                    Nombres d'épisodes : " . $serie->__get('nbEpisode') . " - 
+                    Ajoutée le " . $serie->__get('dateAjout')->format('Y-m-d') . "</h2>
+                <h3>Genre : $genres | Public : $typePublic</h3>
+                <p>" . htmlspecialchars($serie->__get('descriptif')) . "</p>
+                {$this->form()}
+                <img src='" . htmlspecialchars($serie->__get('cheminImage')) . "' alt='Image de la série'>
+            </div>";
+
+            foreach ($serie->liste as $episode) {
+                $episodeRender = new EpisodeRender($episode);
+                $res.= $episodeRender->render(Renderer::COMPACT);
+            }
         }
+        return $res;
+    }
+
+    public function form():string{
+        $res="<form method='post'>";
+        if(!isset($_SESSION['added'])){
+            if(isset($_SESSION['selected_serie']) && isset($_SESSION['preferences'])){
+                $series = $_SESSION['preferences'];
+                $serie = $_SESSION['selected_serie'];
+                if($series->verifierSerie($serie)){
+                    $stat=true;
+                }
+                else{
+                    $stat=false;
+                }
+            }
+            else{
+                return "<h2>Aucune serie selectionnee ou tu n'as pas une liste de tes séries préférées</h2>";
+            }
+            $_SESSION['in']=$stat;
+        }
+        if($_SESSION['in']){
+            $res.="<button type='submit' name='del-serie'>Retirer des favoris</button>";
+        }
+        else{
+            $res.="<button type='submit' name='add-serie'>Ajouter aux favoris</button>";
+        }
+        return $res."</form";
+
     }
 }
 

@@ -1,7 +1,7 @@
 <?php
 namespace iutnc\netvod\dispatch;
 
-use iutnc\netvod\action\{
+use iutnc\netvod\action\{DisplayAccueil,
     DisplayCatalogueAction,
     DisplayEpisodeAction,
     DisplaySerieAction,
@@ -13,9 +13,7 @@ use iutnc\netvod\action\{
     ForgettenPasswordAction,
     SelectProfilAction,
     AddNewProfilAction,
-    DefaultAction,
-    Action_displayAvis,
-};
+    Action_displayAvis};
 
 session_start();
 
@@ -33,9 +31,6 @@ class Dispatcher
         $html = '';
 
         switch ($this->action) {
-            case 'default':
-                $action = new DisplayCatalogueAction();
-                break;
             case 'signin':
                 $action = new SigninAction();
                 break;
@@ -66,8 +61,13 @@ class Dispatcher
             case 'display-episode':
                 $action = new DisplayEpisodeAction();
                 break;
+
+            case "action_displayAvis":
+                $diaplyAvis = new Action_displayAvis();
+                $html = $diaplyAvis->execute();
+                break;
             default:
-                $action = new DefaultAction();
+                $action = new DisplayAccueil();
                 break;
         }
 

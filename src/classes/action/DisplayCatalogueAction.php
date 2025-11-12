@@ -1,9 +1,8 @@
 <?php
 namespace iutnc\netvod\action;
 
-use iutnc\netvod\render\SerieRender;
+use iutnc\netvod\renderer\SerieRender;
 use iutnc\netvod\repository\Repository;
-use iutnc\netvod\render\Renderer;
 
 class DisplayCatalogueAction extends Action
 {
