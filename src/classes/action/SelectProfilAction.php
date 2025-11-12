@@ -36,6 +36,7 @@ class SelectProfilAction extends Action
 
                 if ($profil) {
                     $_SESSION['profil'] = $profil;
+                    $repo->setSessionProfil();
                     header('Location: ?action=default');
                     exit();
                 }
