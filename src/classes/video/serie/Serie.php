@@ -5,6 +5,7 @@ namespace iutnc\netvod\video\serie;
 use DateTime;
 use DateTimeZone;
 use iutnc\netvod\video\episode\Episode;
+use iutnc\netvod\repository\Repository;
 
 class Serie {
     private string $titre;
@@ -56,4 +57,17 @@ class Serie {
     public function setTypePublic(array $typePublic): void {
         $this->typePublic = $typePublic;
     }
+
+    public function getNoteMoyenne():float{
+        //recupération de la note moyenne de la serie dans la bd
+        $instance = Repository::getInstance();
+        $prepare = $instance->getPDO()->prepare("SELECT ROUND(AVG(note),2) as moy FROM avisserie WHERE serie_id=?");
+        $prepare->bindValue(1,$this->id);
+        $prepare->execute();
+        $res = $prepare->fetch();
+        return $res['moy'];
+    }
+
+
+    // date("Y-m-d H:i:s");
 }

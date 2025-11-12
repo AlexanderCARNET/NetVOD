@@ -13,7 +13,8 @@ use iutnc\netvod\action\{
     ForgettenPasswordAction,
     SelectProfilAction,
     AddNewProfilAction,
-    DefaultAction
+    DefaultAction,
+    Action_displayAvis,
 };
 
 session_start();
@@ -64,6 +65,11 @@ class Dispatcher
                 break;
             case 'display-episode':
                 $action = new DisplayEpisodeAction();
+                break;
+
+            case "action_displayAvis":
+                $diaplyAvis = new Action_displayAvis();
+                $html = $diaplyAvis->execute();
                 break;
             default:
                 $action = new DefaultAction();

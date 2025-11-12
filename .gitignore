@@ -1,3 +1,6 @@
 /video/
 Config.db.ini
 /vendor/
+.idea
+.mp4
+.png
