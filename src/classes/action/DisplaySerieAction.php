@@ -34,7 +34,12 @@ class DisplaySerieAction extends Action {
             }
             $_SESSION['selected_serie'] = $serie;
             $render =  new SerieRender($serie);
-            return $render->render(Renderer::LONG);
+            $res = $render->render(Renderer::LONG);
+
+            //ajout de l'espace commentaire
+
+
+            return $res;
         }
     }
 }

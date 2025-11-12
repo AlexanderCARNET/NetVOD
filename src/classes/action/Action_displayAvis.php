@@ -13,7 +13,7 @@ class Action_displayAvis extends Action
     public function execute(): string
     {
 
-        $listAvis = Avis::getAvisSerie($_SESSION['id_serie']);
+        $listAvis = Avis::getAvisSerie($_SESSION['selected_serie']->id);
 
         //concatenation de tout
         $res = "<h2>Espace commentaires : </h2>";

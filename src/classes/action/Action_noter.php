@@ -10,8 +10,6 @@ class Action_noter extends Action
     public function execute(): string
     {
 
-
-
         //verification si l'utilisateur a deja noter cette série
         $instance = Repository::getInstance();
         $prepare = $instance->getPDO()->prepare("select count(*) as count from avisserie where user_id = ? and serie_id = ?");
@@ -67,7 +65,7 @@ class Action_noter extends Action
         $instance = Repository::getInstance();
         $prepare = $instance->getPDO()->prepare("INSERT INTO avisserie (user_id, serie_id, note, commentaire) VALUES (?,?,?,?)");
         $prepare->bindValue(1, $_SESSION["user"]["id"]);
-        $prepare->bindValue(2, $_SESSION["id_serie"]);
+        $prepare->bindValue(2, $_SESSION["selected_serie"]->id);
         $prepare->bindValue(3, $note);
         $prepare->bindValue(4, $commentaire);
         $prepare->execute();
