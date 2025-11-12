@@ -77,22 +77,20 @@ class DisplaySerieAction extends Action {
 
     public function form():string{
         $res="<form method='post'>";
-        if(!isset($_SESSION['in'])){
-            if(isset($_SESSION['selected_serie']) && isset($_SESSION['preferences'])){
-                $series = $_SESSION['preferences'];
-                $serie = $_SESSION['selected_serie'];
-                if($series->verifierSerie($serie)){
-                    $stat=true;
-                }
-                else{
-                    $stat=false;
-                }
+        if(isset($_SESSION['selected_serie']) && isset($_SESSION['preferences'])){
+            $series = $_SESSION['preferences'];
+            $serie = $_SESSION['selected_serie'];
+            if($series->verifierSerie($serie)){
+                $stat=true;
             }
             else{
-                return "<h2>Aucune serie selectionnee ou tu n'as pas une liste de tes séries préférées</h2>";
+                $stat=false;
             }
-            $_SESSION['in']=$stat;
         }
+        else{
+            return "<h2>Aucune serie selectionnee ou tu n'as pas une liste de tes séries préférées</h2>";
+        }
+        $_SESSION['in']=$stat;
         if($_SESSION['in']){
             $res.="<button type='submit' name='del-serie'>Retirer des favoris</button>";
         }
