@@ -1,8 +1,9 @@
 <?php
 namespace iutnc\netvod\action;
 
-use iutnc\netvod\render\EpisodeRender;
-use iutnc\netvod\render\Renderer;
+use iutnc\netvod\renderer\Renderer;
+use iutnc\netvod\renderer\EpisodeRender;
+use iutnc\netvod\repository\Repository;
 
 class DisplayEpisodeAction extends Action
 {
@@ -18,20 +19,42 @@ class DisplayEpisodeAction extends Action
             HTML;
         }
 
+        $enCours=$_SESSION['enCours'];
+        $deja=$_SESSION['dejaVisionnees'];
+        $repo = Repository::getInstance();
+        $pos_ep=1;
+
         // Recherche de l’épisode sélectionné
         $episode = null;
 
         if (isset($_SESSION['selected_serie'])) {
             foreach ($_SESSION['selected_serie']->liste as $ep) {
                 if ($ep->__get('numero') == ($_GET['id_episode'] ?? null)) {
-                    $episode = $ep;
+                    if(!$deja->verifierSerie($_SESSION['selected_serie'])){
+                        if(!$enCours->verifierSerie($_SESSION['selected_serie'])){
+                            $repo->addEnCours();
+                            $enCours->addSerieEnCours($_SESSION['selected_serie'], $pos_ep);
+                        }
+                        else if($enCours->verifierFinSerie($_SESSION['selected_serie'])){
+                            $repo->delEnCours();
+                            $enCours->delSerieEnCours($_SESSION['selected_serie']);
+                            $repo->addDejaVisionnees();
+                            $deja->addSerie($_SESSION['selected_serie']);
+                        }
+                        else{
+                            $enCours->setEnCoursSerie($_SESSION['selected_serie'], $pos_ep);
+                        }
+                    }
                     $_SESSION['selected_episode'] = $ep;
                     break;
+                }
+                else{
+                    $pos_ep++;
                 }
             }
         }
 
-        if ($episode === null) {
+        if ($ep === null) {
             return <<<HTML
                 <div class="info-message">
                     <p>Épisode non trouvé.</p>
@@ -40,7 +63,9 @@ class DisplayEpisodeAction extends Action
             HTML;
         }
 
-        $render = new EpisodeRender($episode);
+
+
+        $render = new EpisodeRender($ep);
         return $render->render(Renderer::LONG);
     }
 }
