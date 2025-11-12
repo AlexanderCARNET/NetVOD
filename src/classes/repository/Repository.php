@@ -5,6 +5,9 @@
 namespace iutnc\netvod\repository;
 
 use iutnc\netvod\video\episode\Episode;
+use iutnc\netvod\video\lists\DejaVisionnees;
+use iutnc\netvod\video\lists\EnCours;
+use iutnc\netvod\video\lists\MesPreference;
 use iutnc\netvod\video\serie\Serie;
 
 use PDO;
@@ -73,7 +76,7 @@ class Repository
 
     //retourne une série avec ses épisodes à partir de son id
     public function getFullSerieById($id_serie): Serie|null{
-        $query = "SELECT * FROM serie WHERE serie_id = :id_serie";
+        $query = "SELECT * FROM serie WHERE serie_id = :id_serie;";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute([':id_serie' => $id_serie]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -121,29 +124,29 @@ class Repository
                 );
                 $serie->addEpisode($episode);
             }
+        }
+        return $serie;
     }
-    return $serie;
-}
 
-// retourne les libelles d'une série en fonction de son id (liste tout les episodes associés)
-function getLibelleById($id_libelle): array|null
-{
-    $stmt = $this->pdo->prepare(
-        "SELECT DISTINCT g.lib_genre
-        FROM Genre g
-        JOIN Video2Genre vg ON g.genre_id = vg.genre_id
-        JOIN Video v ON vg.video_id = v.video_id
-        JOIN Saison s ON v.saison_id = s.saison_id
-        WHERE s.serie_id = :serie_id");
-        $stmt->execute([':serie_id' => $id_libelle]);
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $rows ? array_column($rows, 'lib_genre') : null;
-}
+    // retourne les libelles d'une série en fonction de son id (liste tout les episodes associés)
+    function getLibelleById($id_libelle): array|null
+    {
+        $stmt = $this->pdo->prepare(
+            "SELECT DISTINCT g.lib_genre
+            FROM Genre g
+            JOIN Video2Genre vg ON g.genre_id = vg.genre_id
+            JOIN Video v ON vg.video_id = v.video_id
+            JOIN Saison s ON v.saison_id = s.saison_id
+            WHERE s.serie_id = :serie_id");
+            $stmt->execute([':serie_id' => $id_libelle]);
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $rows ? array_column($rows, 'lib_genre') : null;
+    }
 
-// retourne les types de public d'une série en fonction de son id (liste tout les episodes associés)
-function getTypePublicById($serie_id): array|null
-{
-    $stmt = $this->pdo->prepare(
+    // retourne les types de public d'une série en fonction de son id (liste tout les episodes associés)
+    function getTypePublicById($serie_id): array|null
+    {
+        $stmt = $this->pdo->prepare(
         "SELECT DISTINCT pc.lib_public
         FROM publicCible pc
         JOIN Video2Public vtp ON pc.public_id = vtp.public_id
@@ -171,5 +174,81 @@ function getTypePublicById($serie_id): array|null
             }
         }
         return $series;
+    }
+
+    public function setSessionProfil():void{
+        $pre=new MesPreference([]);
+        $deja=new DejaVisionnees([]);
+        $enCours=new EnCours([], []);
+        if(isset($_SESSION['profil'])){
+            $sql = $this->pdo->prepare('select * from userlistserie where profil_id = :profil;');
+            $sql->execute(['profil'=>$_SESSION['profil']['profil_id']]);
+            $lists=$sql->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($lists as $list){
+                $serie=$this->getFullSerieById($list['serie_id']);
+                if($list['type_liste']=='dejaVisionnees'){
+                    $deja->addSerie($serie);
+                }
+                else if($list['type_liste']=='enCours'){
+                    $enCours->addSerieEnCours($serie, $list['position_courante']);
+                }
+                else if($list['type_liste']=='preferences'){
+                    $pre->addSerie($serie);
+                }
+            }
+            $_SESSION['preferences']=$pre;
+            $_SESSION['dejaVisionnees']=$deja;
+            $_SESSION['enCours']=$enCours;
+            return;
+        }
+    }
+
+    public function addPreferences():void{
+        if(isset($_SESSION['profil']) && isset($_SESSION['selected_serie'])){
+            $sql = $this->pdo->prepare("insert into userlistserie (profil_id, serie_id, type_liste) values (:profil, :serie, 'preferences');");
+            $sql->execute(['profil'=>$_SESSION['profil']['profil_id'], 'serie'=>$_SESSION['selected_serie']->__get('id')]);
+        }
+    }
+
+    public function delPreferences():void{
+        if(isset($_SESSION['profil']) && isset($_SESSION['selected_serie'])){
+            $sql = $this->pdo->prepare("delete from userlistserie where profil_id = :profil and serie_id = :serie and type_liste = 'preferences'");
+            $sql->execute(['profil'=>$_SESSION['profil']['profil_id'], 'serie'=>$_SESSION['selected_serie']->__get('id')]);
+        }
+    }
+
+    public function addEnCours():void{
+        if(isset($_SESSION['profil']) && isset($_SESSION['selected_serie']) && isset($_SESSION['selected_episode'])){
+            $sql = $this->pdo->prepare("insert into userlistserie (profil_id, serie_id, type_liste, position_courante) values (:profil, :serie, 'preferences', :ep);");
+            $sql->execute(['profil'=>$_SESSION['profil']['profil_id'], 'serie'=>$_SESSION['selected_serie']->__get('id'), 'ep'=>$_SESSION['selected_episode']->__get('numero')]);
+        }
+    }
+
+    public function delEnCours():void{
+        if(isset($_SESSION['profil']) && isset($_SESSION['selected_serie'])){
+            $sql = $this->pdo->prepare("delete from userlistserie where profil_id = :profil and serie_id = :serie and type_liste='preferences';");
+            $sql->execute(['profil'=>$_SESSION['profil']['profil_id'], 'serie'=>$_SESSION['selected_serie']->__get('id')]);
+        }
+    }
+
+    public function updateEnCours():void{
+        if(isset($_SESSION['profil']) && isset($_SESSION['selected_serie']) && isset($_SESSION['selected_episode'])){
+            $sql = $this->pdo->prepare("update userlistserie set position_courante = :ep where profil_id = :profil and serie_id = :serie and type_liste='preferences';");
+            $sql->execute(['profil'=>$_SESSION['profil']['profil_id'], 'serie'=>$_SESSION['selected_serie']->__get('id'), 'ep'=>$_SESSION['selected_episode']->__get('numero')]);
+        }
+    }
+
+    public function addDejaVisionnees():void{
+        if(isset($_SESSION['profil']) && isset($_SESSION['selected_serie'])){
+            $sql = $this->pdo->prepare("insert into userlistserie (profil_id, serie_id, type_liste, position_courante) values (:profil, :serie, 'dejaVisionnees', :ep);");
+            $sql->execute(['profil'=>$_SESSION['profil']['profil_id'], 'serie'=>$_SESSION['selected_serie']->__get('id'), 'ep'=>$_SESSION['selected_serie']->nbEpisode]);
+        }
+    }
+
+    public function delDejaVisionnees():void{
+        if(isset($_SESSION['profil']) && isset($_SESSION['selected_serie'])){
+            $sql = $this->pdo->prepare("delete from userlistserie where profil_id = :profil and serie_id = :serie and type_liste = 'dejaVisionnees';");
+            $sql->execute(['profil'=>$_SESSION['profil']['profil_id'], 'serie'=>$_SESSION['selected_serie']->__get('id')]);
+        }
     }
 }
