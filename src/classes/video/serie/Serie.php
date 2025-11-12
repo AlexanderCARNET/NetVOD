@@ -17,7 +17,7 @@ class Serie {
     private int $nbEpisode;
     private array $liste;
     private string $cheminImage;
-    private $id;
+    private int $id;
 
     public function __construct(string $titre,  string $descriptif, int $annee, DateTime $dateAjout, string $cheminImage, $id = null) {
         $this->titre = $titre;

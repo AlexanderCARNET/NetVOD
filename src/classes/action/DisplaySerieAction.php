@@ -32,12 +32,10 @@ class DisplaySerieAction extends Action {
                     </div>
                 HTML;
             }
+            $_SESSION['selected_serie'] = $serie;
             $render =  new SerieRender($serie);
             return $render->render(Renderer::LONG);
         }
-
-        
-
     }
 }
 

@@ -1,9 +1,13 @@
 <?php
 
+
 namespace iutnc\netvod\dispatch;
 
 use iutnc\netvod\action\Action_displayAvis;use iutnc\netvod\action\Action_noter;
 
+use iutnc\netvod\action\DisplayCatalogueAction;
+use iutnc\netvod\action\DisplayEpisodeAction;
+use iutnc\netvod\action\DisplaySerieAction;
 use iutnc\netvod\action\SigninAction;
 use iutnc\netvod\action\AddUserAction;
 use iutnc\netvod\action\LogoutAction;
@@ -19,6 +23,8 @@ session_start();
 class Dispatcher
 {
 
+    
+
     private string $action;
 
     public function __construct()
@@ -33,7 +39,7 @@ class Dispatcher
         switch ($this->action) {
 
             case 'default':
-                $action = new DefaultAction();
+                $action = new DisplayCatalogueAction();
                 $html = $action->execute();
                 break;
             case 'signin':
@@ -59,7 +65,7 @@ class Dispatcher
             case 'forgotten_password':
                 $action = new ForgettenPasswordAction();
                 $html = $action->execute();
-                break;
+                break;  
             case 'select_profil':
                 $action = new SelectProfilAction();
                 $html = $action->execute();
@@ -92,7 +98,7 @@ private function renderPage(string $html): void
             <a href="?action=signup">Inscription</a>
         HTML;
     }
-
+   
     $fullPage = <<<HTML
 <!DOCTYPE html>
 <html lang="fr">
@@ -100,12 +106,11 @@ private function renderPage(string $html): void
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css" />
     <title>netvod</title>
+    <a href ="?action=default">Accueil</a>
+    $topLinks;
 </head>
-
 <body>
-
 $html
-
 </body>
 </html>
 HTML;
