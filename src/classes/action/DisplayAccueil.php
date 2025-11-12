@@ -19,7 +19,9 @@ class DisplayAccueil extends Action
     }
 
     public function form():string{
-        $res="<form method='GET'><h1>Welcome in NetVOD</h1><p>Regarde tes séries et tes films sans limites et sans publicité avec NetVOD.</p>";
+        $res="<form method='GET'><h1>Bienvenue sur NetVOD</h1>";
+        if(!isset($_SESSION['user']))
+            $res.="<p>Regarde tes séries et tes films sans limites et sans publicité avec NetVOD.</p>";
         if(isset($_SESSION['preferences'])) {
             $res .= "<section><div class='titre-preferences'><h2>Mes Preferences</h2>";
             $series = $_SESSION['preferences']->__get('series');
