@@ -77,7 +77,7 @@ class DisplaySerieAction extends Action {
 
     public function form():string{
         $res="<form method='post'>";
-        if(!isset($_SESSION['added'])){
+        if(!isset($_SESSION['in'])){
             if(isset($_SESSION['selected_serie']) && isset($_SESSION['preferences'])){
                 $series = $_SESSION['preferences'];
                 $serie = $_SESSION['selected_serie'];
