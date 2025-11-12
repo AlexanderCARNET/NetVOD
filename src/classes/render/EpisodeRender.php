@@ -15,9 +15,11 @@ class EpisodeRender  implements Renderer{
     public function render(int $selecteur): string {
         if($selecteur === self::COMPACT){
             $html = "<div class='episode-compact'>
+                        <a href='?action=display-episode&id_episode=" . $this->episode->__get('id') . "'>
                         <h2>Episode " . $this->episode->numero . " : " . $this->episode->titre . "</h2>
                         <imag src='" . $this->episode->fileNameImage . "' alt='Image de l\'épisode'>
                         <h3>" . $this->episode->duree . "</h3>
+                        </a>
                     </div>";
         } elseif ($selecteur === self::LONG) {
             $html = "<div class='episode-long'>

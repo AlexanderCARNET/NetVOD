@@ -14,8 +14,10 @@ class SerieRender implements Renderer {
     public function render(int $selecteur): string {
         if ($selecteur === self::COMPACT) {
             $html = "<div class='serie-compact'>
+                        <a href='?action=display-serie&id_serie=" . $this->serie->__get('id') . "'>
                         <h3>" . $this->serie->__get('titre') . "</h3>
                         <img src='" . $this->serie->__get('cheminImage') . "' alt='Image de la série'>
+                        </a>
                     </div>";
         } elseif ($selecteur === self::LONG) {
             $html = "<div class='serie-long'>
