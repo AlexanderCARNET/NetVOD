@@ -42,6 +42,7 @@ class DisplayEpisodeAction extends Action
                             $deja->addSerie($_SESSION['selected_serie']);
                         }
                         else{
+                            $repo->updateEnCours();
                             $enCours->setEnCoursSerie($_SESSION['selected_serie'], $pos_ep);
                         }
                     }
