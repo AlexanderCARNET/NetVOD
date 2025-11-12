@@ -117,7 +117,7 @@ class Repository
                     $epRow['duree'],
                     $epRow['chemin_image']??"",
                     $epRow['fichier']??"",
-                    $epRow['num_dans_saison']
+                    $epRow['resume']
                 );
                 $serie->addEpisode($episode);
             }

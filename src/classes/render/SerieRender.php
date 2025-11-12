@@ -1,48 +1,51 @@
 <?php
 namespace iutnc\netvod\render;
-use iutnc\netvod\render\Renderer;
+
 use iutnc\netvod\video\serie\Serie;
 
-class SerieRender implements Renderer {
-    
+class SerieRender implements Renderer
+{
     private Serie $serie;
 
-    public function __construct(Serie $serie) {
+    public function __construct(Serie $serie)
+    {
         $this->serie = $serie;
     }
 
-    public function render(int $selecteur): string {
+    public function render(int $selecteur): string
+    {
         if ($selecteur === self::COMPACT) {
-            $html = "<div class='serie-compact'>
-                        <a href='?action=display-serie&id_serie=" . $this->serie->__get('id') . "'>
-                        <h3>" . $this->serie->__get('titre') . "</h3>
-                        <img src='" . $this->serie->__get('cheminImage') . "' alt='Image de la série'>
-                        </a>
-                    </div>";
+            $html = "
+            <div class='serie-compact'>
+                <a href='?action=display-serie&id_serie=" . $this->serie->__get('id') . "'>
+                    <h3>" . htmlspecialchars($this->serie->__get('titre')) . "</h3>
+                    <img src='" . htmlspecialchars($this->serie->__get('cheminImage')) . "' alt='Image de la série'>
+                </a>
+            </div>";
         } elseif ($selecteur === self::LONG) {
-            $genres = "";
-            foreach($this->serie->__get('genre') as $p){
-                $genres .= $p . " ";
-            } 
-            $typePublic = "";
-            foreach($this->serie->__get('typePublic') as $p){
-                $typePublic .= $p . " ";
-            }
+            $genres = implode(", ", (array)$this->serie->__get('genre'));
+            $typePublic = implode(", ", (array)$this->serie->__get('typePublic'));
 
-            $html = "<div class='serie-long'>
-                        <h1>" . $this->serie->__get('titre') . "</h1>
-                        <h2>Année : " . $this->serie->__get('annee') . " \nNombre d'épisodes : " . $this->serie->__get('nbEpisode') . "Ajoutée le " . $this->serie->__get('dateAjout')->format('Y-m-d') . "</h2>
-                        <h2>Genre : " . $genres .  " \nPublic : " . $typePublic . "</h2>
-                        <p>" . $this->serie->__get('descriptif') . "</p>
-                        <img src='" . $this->serie->__get('cheminImage') . "' alt='Image de la série'>
-                    </div>";
-                    foreach ($this->serie->liste as $episode) {
-                        $episodeRender = new EpisodeRender($episode);
-                        $html .= $episodeRender->render(self::COMPACT);
-                    }
+            $html = "
+            <div class='serie-long'>
+                <h1>" . htmlspecialchars($this->serie->__get('titre')) . "</h1>
+                <h2>Année : " . $this->serie->__get('annee') . " — 
+                    Épisodes : " . $this->serie->__get('nbEpisode') . " — 
+                    Ajoutée le " . $this->serie->__get('dateAjout')->format('Y-m-d') . "</h2>
+                <h3>Genre : $genres | Public : $typePublic</h3>
+                <p>" . htmlspecialchars($this->serie->__get('descriptif')) . "</p>
+                <img src='" . htmlspecialchars($this->serie->__get('cheminImage')) . "' alt='Image de la série'>
+            </div>";
+
+            // Rendu des épisodes liés
+            foreach ($this->serie->liste as $episode) {
+                $episodeRender = new EpisodeRender($episode);
+                $html .= $episodeRender->render(self::COMPACT);
+            }
         } else {
             throw new \Exception("Sélecteur de rendu inconnu : " . $selecteur);
         }
+
         return $html;
     }
 }

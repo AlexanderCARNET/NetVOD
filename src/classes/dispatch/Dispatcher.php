@@ -1,29 +1,25 @@
 <?php
-
-
 namespace iutnc\netvod\dispatch;
 
-
-use iutnc\netvod\action\DisplayCatalogueAction;
-use iutnc\netvod\action\DisplayEpisodeAction;
-use iutnc\netvod\action\DisplaySerieAction;
-use iutnc\netvod\action\SigninAction;
-use iutnc\netvod\action\AddUserAction;
-use iutnc\netvod\action\LogoutAction;
-use iutnc\netvod\action\ActivateAction;
-use iutnc\netvod\action\ProfilAction;
-use iutnc\netvod\action\ForgettenPasswordAction;
-use iutnc\netvod\action\SelectProfilAction;
-use iutnc\netvod\action\AddNewProfilAction;
-use iutnc\netvod\action\DefaultAction;
+use iutnc\netvod\action\{
+    DisplayCatalogueAction,
+    DisplayEpisodeAction,
+    DisplaySerieAction,
+    SigninAction,
+    AddUserAction,
+    LogoutAction,
+    ActivateAction,
+    ProfilAction,
+    ForgettenPasswordAction,
+    SelectProfilAction,
+    AddNewProfilAction,
+    DefaultAction
+};
 
 session_start();
 
 class Dispatcher
 {
-
-    
-
     private string $action;
 
     public function __construct()
@@ -36,95 +32,71 @@ class Dispatcher
         $html = '';
 
         switch ($this->action) {
-
             case 'default':
                 $action = new DisplayCatalogueAction();
-                $html = $action->execute();
                 break;
             case 'signin':
                 $action = new SigninAction();
-                $html = $action->execute();
                 break;
             case 'signup':
                 $action = new AddUserAction();
-                $html = $action->execute();
                 break;
             case 'logout':
                 $action = new LogoutAction();
-                $html = $action->execute();
                 break;
             case 'activate':
                 $action = new ActivateAction();
-                $html = $action->execute();
                 break;
             case 'profil':
                 $action = new ProfilAction();
-                $html = $action->execute();
                 break;
             case 'forgotten_password':
                 $action = new ForgettenPasswordAction();
-                $html = $action->execute();
-                break;  
+                break;
             case 'select_profil':
                 $action = new SelectProfilAction();
-                $html = $action->execute();
                 break;
             case 'add_new_profil':
                 $action = new AddNewProfilAction();
-                $html = $action->execute();
                 break;
             case 'display-serie':
                 $action = new DisplaySerieAction();
-                $html = $action->execute();
                 break;
             case 'display-episode':
                 $action = new DisplayEpisodeAction();
-                $html = $action->execute();
                 break;
-        
-           
-
-
-
+            default:
+                $action = new DefaultAction();
+                break;
         }
 
+        $html = $action->execute();
         $this->renderPage($html);
     }
 
-private function renderPage(string $html): void
-{
+    private function renderPage(string $html): void
+    {
+        $topLinks = isset($_SESSION['user'])
+            ? '<a href="?action=profil">Profil</a> | <a href="?action=logout">Déconnexion</a>'
+            : '<a href="?action=signin">Connexion</a> | <a href="?action=signup">Inscription</a>';
 
-        if (isset($_SESSION['user'])) {
-        $email = $_SESSION['user']['email'];
-        $topLinks = <<<HTML
-            <a href="?action=profil">Profil</a> 
-            <a href="?action=logout">Déconnexion</a>
-        HTML;
-    } else {
-        $topLinks = <<<HTML
-            <a href="?action=signin">Connexion</a> 
-            <a href="?action=signup">Inscription</a>
+        echo <<<HTML
+        <!DOCTYPE html>
+        <html lang="fr">
+        <head>
+            <meta charset="UTF-8">
+            <link rel="stylesheet" href="style.css" />
+            <title>NetVOD</title>
+        </head>
+        <body>
+            <nav>
+                <a href="?action=default">Accueil</a> | $topLinks
+            </nav>
+            <main>
+                $html
+            </main>
+        </body>
+        </html>
         HTML;
     }
-   
-    $fullPage = <<<HTML
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css" />
-    <title>netvod</title>
-    <a href ="?action=default">Accueil</a>
-    $topLinks;
-</head>
-<body>
-$html
-</body>
-</html>
-HTML;
-
-    echo $fullPage;
 }
-}
-?>
-

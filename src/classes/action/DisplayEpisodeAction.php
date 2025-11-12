@@ -1,50 +1,46 @@
 <?php
-
 namespace iutnc\netvod\action;
 
-use iutnc\netvod\action\Action;
-use iutnc\netvod\render\Renderer;
 use iutnc\netvod\render\EpisodeRender;
+use iutnc\netvod\render\Renderer;
 
-// Action gérant l'affichage du catalogue des Séries
-class DisplayEpisodeAction extends Action {
-
-    public function execute(): string {
-        // Vérification que l'utilisateur est connecté
+class DisplayEpisodeAction extends Action
+{
+    public function execute(): string
+    {
         if (!isset($_SESSION['user'])) {
             return <<<HTML
                 <div class="info-message">
                     <p>Vous devez être connecté pour accéder à cette fonctionnalité.</p>
                     <a href="?action=signin" class="btn">Se connecter</a>
-                    <a href="?action=add-user" class="btn">Créer un compte</a>
+                    <a href="?action=signup" class="btn">Créer un compte</a>
                 </div>
             HTML;
-        } else {
-            $res = '';
-            if(!isset($_SESSION['selected_episode'])){
-                foreach($_SESSION['selected_serie']->liste as $ep){
-                    if($ep->numero == $_GET['id_episode']){
-                        $_SESSION['selected_episode'] = $ep;
-                        break;
-                    }
-                }
-
-            }
-            $episodes = $_SESSION['selected_episode'];
-            // si l'épisode n'existe pas
-            if ($episodes === null) {
-                $res = <<<HTML
-                    <div class="info-message">
-                        <p>Épisode non trouvé.</p>
-                        <a href="?action=catalogue" class="btn">Retour au catalogue</a>
-                    </div>
-                HTML;
-            } else {
-                // Affichage de l'épisode
-                $render = new EpisodeRender($episodes);
-                $res = $render->render(Renderer::LONG);
-            }
-            return $res;
         }
+
+        // Recherche de l’épisode sélectionné
+        $episode = null;
+
+        if (isset($_SESSION['selected_serie'])) {
+            foreach ($_SESSION['selected_serie']->liste as $ep) {
+                if ($ep->__get('numero') == ($_GET['id_episode'] ?? null)) {
+                    $episode = $ep;
+                    $_SESSION['selected_episode'] = $ep;
+                    break;
+                }
+            }
+        }
+
+        if ($episode === null) {
+            return <<<HTML
+                <div class="info-message">
+                    <p>Épisode non trouvé.</p>
+                    <a href="?action=catalogue" class="btn">Retour au catalogue</a>
+                </div>
+            HTML;
+        }
+
+        $render = new EpisodeRender($episode);
+        return $render->render(Renderer::LONG);
     }
 }

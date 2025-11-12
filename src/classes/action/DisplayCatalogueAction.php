@@ -1,65 +1,29 @@
-<?php 
-
+<?php
 namespace iutnc\netvod\action;
+
 use iutnc\netvod\render\SerieRender;
 use iutnc\netvod\repository\Repository;
+use iutnc\netvod\render\Renderer;
 
-//DisplayCatalogue : 
-// si user connecté
-// -> affiche catalogue des séries
-// --> affiche series en cours
-// --> affiche puis series avec le genre préf
-// --> affiche toutes les séries restantes
-
-class DisplayCatalogueAction extends Action {
-
-
-    function execute(): string
-    {   
-        $repo = Repository::getInstance();
-        $series_total = $repo->getAllSeriesCompact();
-        // On suppose que c'est 4 listes différentes
-        $cours_serie = $_SESSION['encours']->__get("enCours"); // de type EnCours->Array
-        $serie_genre_pref = $_SESSION['preferences']->__get("series"); // de type MesPreference->Array
-        $serie_pref = $_SESSION['profil']['genre_pref']; // de type Array
-        $serie_restants = array_diff($series_total, $serie_genre_pref, $cours_serie, $serie_pref) ; // entre toutes les séries 
-        
-        $html = '<h1> Catalogue <h1>';
-
-        // si user connecté
-        if (isset($_SESSION['user'])){
-            // affichage du catalogue : 
-
-            // affichage des séries en cours : 
-            foreach($cours_serie as $serie){
-                //Renderer
-                $renderer = new SerieRender($serie);
-                $html .= $renderer->render(1);
-            }
-            
-            // affichage des séries avec le genre pref : 
-            foreach($serie_genre_pref as $serie){
-                //Renderer
-                $renderer = new SerieRender($serie);
-                $html .= $renderer->render(1);
-            }
-            
-            // affichage des séries restantes : 
-            foreach($serie_restants as $serie){
-                //Renderer
-                $renderer = new SerieRender($serie);
-                $html .= $renderer->render(1);
-            }
-            
-            
-        }
-
-        else{
+class DisplayCatalogueAction extends Action
+{
+    public function execute(): string
+    {
+        if (!isset($_SESSION['user'])) {
             header('Location: ?action=signin');
             exit();
         }
 
+        $repo = Repository::getInstance();
+        $series_total = $repo->getAllSeriesCompact();
+
+        $html = '<h1>Catalogue</h1>';
+
+        foreach ($series_total as $serie) {
+            $renderer = new SerieRender($serie);
+            $html .= $renderer->render(Renderer::COMPACT);
+        }
+
         return $html;
     }
-    
 }
