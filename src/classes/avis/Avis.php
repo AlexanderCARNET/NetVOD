@@ -42,4 +42,18 @@ class Avis
         }
         return $listAvis;
     }
+    public static function getAvisVideo(int $id_episode):array
+    {
+        $listAvis = [];
+        //recuperation de tous les avis de la bd
+        $instance = Repository::getInstance();
+        $prepare = $instance->getPDO()->prepare("select email, commentaire, note from avisvideo inner join utilisateur on utilisateur.user_id = avisvideo.user_id where video_id=? ");
+        $prepare->bindParam(1,$id_episode);
+        $prepare->execute();
+        while($row = $prepare->fetch()){
+            $avis = new Avis($row["email"],$row["commentaire"],$row["note"]);
+            array_push($listAvis,$avis);
+        }
+        return $listAvis;
+    }
 }
