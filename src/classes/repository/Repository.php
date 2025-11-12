@@ -6,7 +6,6 @@ namespace iutnc\netvod\repository;
 
 use iutnc\netvod\video\episode\Episode;
 use iutnc\netvod\video\serie\Serie;
-session_start();
 
 use PDO;
 use DateTime;
@@ -58,7 +57,7 @@ class Repository
     // retourne une série sans ses épisodes à partir de son id pour render au format compact
     public function getSerieById($id_serie): Serie|null
     {
-        $stmt = $this->pdo->prepare("SELECT nom_serie, chemin_image, id FROM serie WHERE id = :id_serie");
+        $stmt = $this->pdo->prepare("SELECT nom_serie, chemin_image, serie_id FROM serie WHERE serie_id = :id_serie");
         $stmt->execute([':id_serie' => $id_serie]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($row) {
@@ -66,7 +65,7 @@ class Repository
                 $row['nom_serie'],
                 '',0,new DateTime(),
                 $row['chemin_image']
-                ,$row['id']
+                ,$row['serie_id']
             );
         }
         return null;
@@ -74,7 +73,7 @@ class Repository
 
     //retourne une série avec ses épisodes à partir de son id
     public function getFullSerieById($id_serie): Serie|null{
-        $query = "SELECT * FROM serie WHERE id = :id_serie";
+        $query = "SELECT * FROM serie WHERE serie_id = :id_serie";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute([':id_serie' => $id_serie]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -95,7 +94,7 @@ class Repository
             $serie = new Serie(
                 $titre,
                 $descriptif,
-                $annee,
+                (int)$annee,
                 $date_ajout,
                 $chemin_image,
                 $id_serie
@@ -106,19 +105,19 @@ class Repository
 
 
             // Récupérer les épisodes associés à la série
-            $episodeQuery = "SELECT *, COUNT(*) as episode_count FROM episode WHERE serie_id = :serie_id";
+            $episodeQuery = "SELECT *, COUNT(*) as episode_count FROM video WHERE saison_id = :serie_id";
             $episodeStmt = $this->pdo->prepare($episodeQuery);
-            $episodeStmt->execute([':id_serie' => $id_serie]);
+            $episodeStmt->execute([':serie_id' => $id_serie]);
             $episodes = $episodeStmt->fetchAll(PDO::FETCH_ASSOC);
 
             foreach ($episodes as $epRow) {
                 $episode = new Episode(
-                    $epRow['id'],
+                    $epRow['video_id'],
                     $epRow['titre'],
                     $epRow['duree'],
-                    $epRow['chemin_image'],
-                    $epRow['chemin_video'],
-                    $epRow['numero_episode']
+                    $epRow['chemin_image']??"",
+                    $epRow['fichier']??"",
+                    $epRow['num_dans_saison']
                 );
                 $serie->addEpisode($episode);
             }
@@ -161,12 +160,12 @@ function getTypePublicById($serie_id): array|null
     // retourne toutes les séries en format compact à completer pour le catalogue (ordre des filtres?)
     public function getAllSeriesCompact(): array {
         $series = [];
-        $query = "SELECT id FROM serie";
+        $query = "SELECT serie_id FROM serie";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($rows as $row) {
-            $serie = $this->getSerieById($row['id']);
+            $serie = $this->getSerieById($row['serie_id']);
             if ($serie !== null) {
                 $series[] = $serie;
             }
