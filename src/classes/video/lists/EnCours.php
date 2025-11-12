@@ -105,7 +105,7 @@ class EnCours extends SerieList
     public function verifierFinSerie(Serie $serie):bool{
         foreach ($this->series as $s){
             if($s==$serie)
-                if($s->__get('nb_episodes')==$this->enCours[$s->__get('titre')]){
+                if($s->__get('nbEpisode')==$this->enCours[$s->__get('titre')]){
                     return true;
                 }
         }
@@ -121,9 +121,14 @@ class EnCours extends SerieList
     public function getEnCoursSerie(Serie $serie):int{
         foreach ($this->series as $s){
             if($s == $serie){
+                $episodes=$serie->__get('liste');
+                $pos_ep=1;
                 $titre = $s->__get('titre');
-                if($this->enCours[$titre]!=null) {
-                    return $this->enCours[$titre];
+                foreach ($episodes as $ep){
+                    if($pos_ep==$this->enCours[$titre]){
+                        return $ep->__get('numero');
+                    }
+                    $pos_ep++;
                 }
             }
         }
