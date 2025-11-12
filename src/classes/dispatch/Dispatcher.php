@@ -1,8 +1,8 @@
 <?php
 
-
 namespace iutnc\netvod\dispatch;
 
+use iutnc\netvod\action\Action_displayAvis;use iutnc\netvod\action\Action_noter;
 
 use iutnc\netvod\action\SigninAction;
 use iutnc\netvod\action\AddUserAction;
@@ -18,8 +18,6 @@ session_start();
 
 class Dispatcher
 {
-
-    
 
     private string $action;
 
@@ -61,7 +59,7 @@ class Dispatcher
             case 'forgotten_password':
                 $action = new ForgettenPasswordAction();
                 $html = $action->execute();
-                break;  
+                break;
             case 'select_profil':
                 $action = new SelectProfilAction();
                 $html = $action->execute();
@@ -70,11 +68,10 @@ class Dispatcher
                 $action = new AddNewProfilAction();
                 $html = $action->execute();
                 break;
-        
-           
-
-
-
+            case "action_displayAvis":
+                $diaplyAvis = new Action_displayAvis();
+                $html = $diaplyAvis->execute();
+                break;
         }
 
         $this->renderPage($html);
@@ -95,7 +92,7 @@ private function renderPage(string $html): void
             <a href="?action=signup">Inscription</a>
         HTML;
     }
-   
+
     $fullPage = <<<HTML
 <!DOCTYPE html>
 <html lang="fr">
@@ -103,11 +100,12 @@ private function renderPage(string $html): void
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css" />
     <title>netvod</title>
-    <a href ="?action=default">Accueil</a>
-    $topLinks;
 </head>
+
 <body>
+
 $html
+
 </body>
 </html>
 HTML;
