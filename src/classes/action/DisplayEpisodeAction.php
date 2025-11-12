@@ -21,6 +21,15 @@ class DisplayEpisodeAction extends Action {
             HTML;
         } else {
             $res = '';
+            if(!isset($_SESSION['selected_episode'])){
+                foreach($_SESSION['selected_serie']->liste as $ep){
+                    if($ep->numero == $_GET['id_episode']){
+                        $_SESSION['selected_episode'] = $ep;
+                        break;
+                    }
+                }
+
+            }
             $episodes = $_SESSION['selected_episode'];
             // si l'épisode n'existe pas
             if ($episodes === null) {
