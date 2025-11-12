@@ -20,10 +20,19 @@ class SerieRender implements Renderer {
                         </a>
                     </div>";
         } elseif ($selecteur === self::LONG) {
+            $genres = "";
+            foreach($this->serie->__get('genre') as $p){
+                $genres .= $p . " ";
+            } 
+            $typePublic = "";
+            foreach($this->serie->__get('typePublic') as $p){
+                $typePublic .= $p . " ";
+            }
+
             $html = "<div class='serie-long'>
                         <h1>" . $this->serie->__get('titre') . "</h1>
                         <h2>Année : " . $this->serie->__get('annee') . " \nNombre d'épisodes : " . $this->serie->__get('nbEpisode') . "Ajoutée le " . $this->serie->__get('dateAjout')->format('Y-m-d') . "</h2>
-                        <h2>Genre : " . $this->serie->__get('genre') . " \nPublic :" . $this->serie->__get('typePublic') . "</h2>
+                        <h2>Genre : " . $genres .  " \nPublic : " . $typePublic . "</h2>
                         <p>" . $this->serie->__get('descriptif') . "</p>
                         <img src='" . $this->serie->__get('cheminImage') . "' alt='Image de la série'>
                     </div>";
