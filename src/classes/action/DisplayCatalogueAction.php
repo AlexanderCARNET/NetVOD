@@ -17,12 +17,13 @@ class DisplayCatalogueAction extends Action
         $repo = Repository::getInstance();
         $series_total = $repo->getAllSeriesCompact();
 
-        $html = '<h1>Catalogue</h1>';
+   $html = '<h1>Catalogue</h1><div class="catalogue">';
+foreach ($series_total as $serie) {
+    $renderer = new SerieRender($serie);
+    $html .= $renderer->render(Renderer::COMPACT);
+}
+$html .= '</div>';
 
-        foreach ($series_total as $serie) {
-            $renderer = new SerieRender($serie);
-            $html .= $renderer->render(Renderer::COMPACT);
-        }
 
         return $html;
     }

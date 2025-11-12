@@ -78,20 +78,22 @@ class Dispatcher
     private function renderPage(string $html): void
     {
         $topLinks = isset($_SESSION['user'])
-            ? '<a href="?action=profil">Profil</a> | <a href="?action=logout">Déconnexion</a>'
-            : '<a href="?action=signin">Connexion</a> | <a href="?action=signup">Inscription</a>';
+            ? '<a href="?action=profil">Profil</a> <a href="?action=logout">Déconnexion</a>'
+            : '<a href="?action=signin">Connexion</a>  <a href="?action=signup">Inscription</a>';
 
         echo <<<HTML
         <!DOCTYPE html>
         <html lang="fr">
         <head>
             <meta charset="UTF-8">
-            <link rel="stylesheet" href="style.css" />
+            <link rel="stylesheet" href="css/styles.css" />
             <title>NetVOD</title>
         </head>
-        <body>
+        <body class="dark">
             <nav>
-                <a href="?action=default">Accueil</a> | $topLinks
+                <div class="btn">
+                <a href="?action=default">Accueil</a> $topLinks
+                </div>
             </nav>
             <main>
                 $html

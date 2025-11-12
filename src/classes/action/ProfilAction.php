@@ -49,11 +49,16 @@ class ProfilAction extends Action
         $genre_pref = htmlspecialchars($profil['genre_pref'] ?? '');
 
         return <<<HTML
+            <div class="serie-long">
             <h2>Profil actuel</h2>
             <p><strong>Email :</strong> {$email}</p>
             <p><strong>Prénom :</strong> {$prenom}</p>
             <p><strong>Nom :</strong> {$nom}</p>
             <p><strong>Genre préféré :</strong> {$genre_pref}</p>
+            </div>
+                 <div class="btn">
+            <a href="?action=select_profil">Changer de profil</a>
+            </div>
             <hr>
             <h3>Modifier le profil</h3>
             <form method="POST" action="?action=profil">
@@ -69,7 +74,7 @@ class ProfilAction extends Action
                 <button type="submit">Mettre à jour le profil</button>
             </form>
             <hr>
-            <a href="?action=select_profil">Changer de profil</a>
+       
         HTML;
     }
 }

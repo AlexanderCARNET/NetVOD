@@ -52,7 +52,9 @@ class AddNewProfilAction extends Action
             $_SESSION['user']['genre_pref'] = $genre_pref;
 
             return "<p><strong>Nouveau profil créé avec succès.</strong></p>
-                    <a href='?action=select_profil'>Sélectionner un profil</a>";
+                    <div class='btn-pc'>
+                    <a href='?action=select_profil'>Sélectionner un profil</a>
+                    </div>";
         }
 
       

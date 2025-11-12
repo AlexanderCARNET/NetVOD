@@ -71,59 +71,62 @@ class Repository
         return null;
     }
 
-    //retourne une série avec ses épisodes à partir de son id
-    public function getFullSerieById($id_serie): Serie|null{
-        $query = "SELECT * FROM serie WHERE serie_id = :id_serie";
-        $stmt = $this->pdo->prepare($query);
-        $stmt->execute([':id_serie' => $id_serie]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        // private int $nbEpisode;
-        // private array $liste;
-        // private string $cheminImage;
-        // private $id;
-        if ($row) {
-            $titre = $row['nom_serie'];
-            $annee = $row['date_sortie'];
-            $date_ajout = new DateTime($row['date_ajout']);
-    
-            $descriptif = $row['resume'];
-            $chemin_image = $row['chemin_image'];
-            $genre = $this->getLibelleById($id_serie);
-            $typePublic = $this->getTypePublicById($id_serie);
+public function getFullSerieById($id_serie): ?Serie
+{
+    $query = "SELECT * FROM serie WHERE serie_id = :id_serie";
+    $stmt = $this->pdo->prepare($query);
+    $stmt->execute([':id_serie' => $id_serie]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $serie = new Serie(
-                $titre,
-                $descriptif,
-                (int)$annee,
-                $date_ajout,
-                $chemin_image,
-                $id_serie
-            );
+    if (!$row) return null;
 
-            $serie->setGenres($genre);
-            $serie->setTypePublic($typePublic);
+    $titre = $row['nom_serie'];
+    $annee = (int)$row['date_sortie'];
+    $date_ajout = new DateTime($row['date_ajout']);
+    $descriptif = $row['resume'];
+    $chemin_image = $row['chemin_image'];
 
+    // Récupération des genres et publics associés
+    $genres = $this->getLibelleById($id_serie);
+    $typePublic = $this->getTypePublicById($id_serie);
 
-            // Récupérer les épisodes associés à la série
-            $episodeQuery = "SELECT *, COUNT(*) as episode_count FROM video WHERE saison_id = :serie_id";
-            $episodeStmt = $this->pdo->prepare($episodeQuery);
-            $episodeStmt->execute([':serie_id' => $id_serie]);
-            $episodes = $episodeStmt->fetchAll(PDO::FETCH_ASSOC);
+    // Création de l’objet Serie
+    $serie = new Serie(
+        $titre,
+        $descriptif,
+        $annee,
+        $date_ajout,
+        $chemin_image,
+        $id_serie
+    );
+    $serie->setGenres($genres);
+    $serie->setTypePublic($typePublic);
 
-            foreach ($episodes as $epRow) {
-                $episode = new Episode(
-                    $epRow['video_id'],
-                    $epRow['titre'],
-                    $epRow['duree'],
-                    $epRow['chemin_image']??"",
-                    $epRow['fichier']??"",
-                    $epRow['resume']
-                );
-                $serie->addEpisode($episode);
-            }
+    $episodeQuery = "
+        SELECT v.*
+        FROM video v
+        JOIN saison s ON v.saison_id = s.saison_id
+        WHERE s.serie_id = :serie_id
+        ORDER BY s.num_saison, v.num_dans_saison ASC";
+    $episodeStmt = $this->pdo->prepare($episodeQuery);
+    $episodeStmt->execute([':serie_id' => $id_serie]);
+    $episodes = $episodeStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($episodes as $epRow) {
+        $episode = new Episode(
+            $epRow['video_id'],
+            $epRow['titre'],
+            $epRow['duree'],
+            $epRow['chemin_image'] ?? "",
+            $epRow['fichier'] ?? "",
+            $epRow['resume']
+        );
+        $serie->addEpisode($episode);
     }
+
     return $serie;
 }
+
 
 // retourne les libelles d'une série en fonction de son id (liste tout les episodes associés)
 function getLibelleById($id_libelle): array|null
