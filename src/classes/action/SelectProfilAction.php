@@ -36,7 +36,6 @@ class SelectProfilAction extends Action
 
                 if ($profil) {
                     $_SESSION['profil'] = $profil;
-
                     header('Location: ?action=default');
                     exit();
                 }
@@ -45,16 +44,29 @@ class SelectProfilAction extends Action
             }
         }
 
-        $html = "<h2>Choisissez un profil</h2>
-                 <form method='post' action='?action=select_profil'>
-                 <select name='profil_id'>";
+        $defaultImage = 'images/profil.png';  
+
+        $html = "<link rel='stylesheet' href='css/select_profil.css'>";
+        $html .= "<h2>Choisissez un profil</h2>";
+        $html .= "<form method='post' action='?action=select_profil' class='profil-container'>";
+
         foreach ($profils as $p) {
             $prenom = htmlspecialchars($p['prenom']);
             $nom = htmlspecialchars($p['nom']);
-            $html .= "<option value='{$p['profil_id']}'>{$prenom} {$nom}</option>";
-        }
-        $html .= "</select><br><button type='submit'>Utiliser ce profil</button></form>";
+            $profil_id = $p['profil_id'];
 
+            $html .= "
+                <div class='profil-card'>
+                    <button type='submit' name='profil_id' value='{$profil_id}' class='profil-btn'>
+                        <img src='{$defaultImage}' alt='{$prenom} {$nom}' class='profil-img'>
+                        <div class='profil-name'>{$prenom} {$nom}</div>
+                    </button>
+                </div>
+            ";
+        }
+
+        $html .= "</form>";
+        $html .= "<a href ='?action=add_new_profil' class='add-profil-link'>Créer un nouveau profil</a>";
         return $html;
     }
 }
