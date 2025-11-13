@@ -35,14 +35,15 @@ class DisplayEpisodeAction extends Action
                             $repo->addEnCours();
                             $enCours->addSerieEnCours($_SESSION['selected_serie'], $pos_ep);
                         }
-                        else if($enCours->verifierFinSerie($_SESSION['selected_serie'])){
+                        else{
+                            $repo->updateEnCours();
+                            $enCours->setEnCoursSerie($_SESSION['selected_serie'], $pos_ep);
+                        }
+                        if($enCours->verifierFinSerie($_SESSION['selected_serie'])){
                             $repo->delEnCours();
                             $enCours->delSerieEnCours($_SESSION['selected_serie']);
                             $repo->addDejaVisionnees();
                             $deja->addSerie($_SESSION['selected_serie']);
-                        }
-                        else{
-                            $enCours->setEnCoursSerie($_SESSION['selected_serie'], $pos_ep);
                         }
                     }
                     $_SESSION['selected_episode'] = $ep;
