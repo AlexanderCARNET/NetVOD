@@ -91,7 +91,7 @@ class DisplayAccueil extends Action
         $res .= "<section class='catalogue-section'>";
         $res .= "<h2>Catalogue</h2><div class='catalogue'>";
         $repo = Repository::getInstance();
-        $series_total = $repo->getAllSeriesCompact();
+        $series_total = $repo->getAllSeries();
 
         foreach ($series_total as $serie) {
             $render = new SerieRender($serie);

@@ -3,11 +3,8 @@ namespace iutnc\netvod\action;
 
 use iutnc\netvod\renderer\SerieRender;
 use iutnc\netvod\repository\Repository;
-<<<<<<< HEAD
-=======
-use iutnc\netvod\render\Renderer;
+use iutnc\netvod\renderer\Renderer;
 use iutnc\netvod\video\serie\Serie;
->>>>>>> Navig_Catalogue_Flo
 
 class DisplayCatalogueAction extends Action
 {
