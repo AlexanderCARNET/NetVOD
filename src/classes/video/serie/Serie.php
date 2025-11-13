@@ -4,6 +4,7 @@ namespace iutnc\netvod\video\serie;
 
 use DateTime;
 use DateTimeZone;
+use iutnc\netvod\exception\ExceptionPasNote;
 use iutnc\netvod\video\episode\Episode;
 use iutnc\netvod\repository\Repository;
 
@@ -65,6 +66,9 @@ class Serie {
         $prepare->bindValue(1,$this->id);
         $prepare->execute();
         $res = $prepare->fetch();
+        if(is_null($res['moy'])){
+            throw new ExceptionPasNote();
+        }
         return $res['moy'];
     }
 

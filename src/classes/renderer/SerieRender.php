@@ -1,6 +1,7 @@
 <?php
 namespace iutnc\netvod\renderer;
 
+use iutnc\netvod\exception\ExceptionPasNote;
 use iutnc\netvod\video\serie\Serie;
 
 class SerieRender implements Renderer
@@ -15,10 +16,16 @@ class SerieRender implements Renderer
     public function render(int $selecteur): string
     {
         if ($selecteur === self::COMPACT) {
+            try{
+                $moy = $this->serie->getNoteMoyenne();
+            }catch (ExceptionPasNote $e){
+                $moy = "";
+            }
             $html = "
             <div class='serie-compact'>
                 <a href='?action=display-serie&id_serie=" . $this->serie->__get('id') . "'>
                     <h3>" . htmlspecialchars($this->serie->__get('titre')) . "</h3>
+                    <h3>Note : $moy/5</h3>
                     <img src='" . htmlspecialchars($this->serie->__get('cheminImage')) . "' alt='Image de la série'>
                 </a>
             </div>";
