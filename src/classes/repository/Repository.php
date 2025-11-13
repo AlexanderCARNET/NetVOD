@@ -175,4 +175,30 @@ function getTypePublicById($serie_id): array|null
         }
         return $series;
     }
+
+    // retourne tous les genres existants dans la base de données
+    public function getAllGenres(): array {
+        $genres = [];
+        $query = "SELECT DISTINCT lib_genre FROM Genre";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($rows as $row) {
+            $genres[] = $row['lib_genre'];
+        }
+        return $genres;
+    }
+
+    // retourne tous les types de public existants dans la base de données
+    public function getAllTypesPublic(): array {
+        $types = [];
+        $query = "SELECT DISTINCT lib_public FROM publicCible";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($rows as $row) {
+            $types[] = $row['lib_public'];
+        }
+        return $types;
+    }
 }
