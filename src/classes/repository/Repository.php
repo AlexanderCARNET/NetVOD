@@ -222,21 +222,21 @@ function getLibelleById($id_libelle): array|null
 
     public function addEnCours():void{
         if(isset($_SESSION['profil']) && isset($_SESSION['selected_serie']) && isset($_SESSION['selected_episode'])){
-            $sql = $this->pdo->prepare("insert into userlistserie (profil_id, serie_id, type_liste, position_courante) values (:profil, :serie, 'preferences', :ep);");
+            $sql = $this->pdo->prepare("insert into userlistserie (profil_id, serie_id, type_liste, position_courante) values (:profil, :serie, 'enCours', :ep);");
             $sql->execute(['profil'=>$_SESSION['profil']['profil_id'], 'serie'=>$_SESSION['selected_serie']->__get('id'), 'ep'=>$_SESSION['selected_episode']->__get('numero')]);
         }
     }
 
     public function delEnCours():void{
         if(isset($_SESSION['profil']) && isset($_SESSION['selected_serie'])){
-            $sql = $this->pdo->prepare("delete from userlistserie where profil_id = :profil and serie_id = :serie and type_liste='preferences';");
+            $sql = $this->pdo->prepare("delete from userlistserie where profil_id = :profil and serie_id = :serie and type_liste='enCours';");
             $sql->execute(['profil'=>$_SESSION['profil']['profil_id'], 'serie'=>$_SESSION['selected_serie']->__get('id')]);
         }
     }
 
     public function updateEnCours():void{
         if(isset($_SESSION['profil']) && isset($_SESSION['selected_serie']) && isset($_SESSION['selected_episode'])){
-            $sql = $this->pdo->prepare("update userlistserie set position_courante = :ep where profil_id = :profil and serie_id = :serie and type_liste='preferences';");
+            $sql = $this->pdo->prepare("update userlistserie set position_courante = :ep where profil_id = :profil and serie_id = :serie and type_liste='enCours';");
             $sql->execute(['profil'=>$_SESSION['profil']['profil_id'], 'serie'=>$_SESSION['selected_serie']->__get('id'), 'ep'=>$_SESSION['selected_episode']->__get('numero')]);
         }
     }
