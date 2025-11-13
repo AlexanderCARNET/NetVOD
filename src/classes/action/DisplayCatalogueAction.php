@@ -16,15 +16,40 @@ class DisplayCatalogueAction extends Action
         }
 
         $repo = Repository::getInstance();
-        $series_total = $repo->getAllSeries();
+        $_SESSION['series_recherche'] = $repo->getAllSeries();
 
-   $html = '<h1>Catalogue</h1><div class="catalogue">';
-foreach ($series_total as $serie) {
-    $renderer = new SerieRender($serie);
-    $html .= $renderer->render(Renderer::COMPACT);
-}
-$html .= '</div>';
+        $html = '<h1>Catalogue</h1><div class="catalogue">';
+        
+        
+        if(isset($_GET['filter'])) {
+            if($_GET['filter'] === 'genre') {
+                $genre = $_GET['filter_genre'];
+                $_SESSION['series_recherche'] = $this->filterByGenre($_SESSION['series_recherche'], $genre);
+            } elseif($_GET['filter'] === 'typePublic') {
+                $typePublic = $_GET['filter_typePublic'];
+                $_SESSION['series_recherche'] = $this->filterByTypePublic($_SESSION['series_recherche'], $typePublic);
+            }
+        }
 
+        if(isset($_GET['mot_clef'])) {
+            $motClef = $_GET['mot_clef'];
+            $_SESSION['series_recherche'] = $this->motClef($_SESSION['series_total'], $motClef);
+        }
+        
+        if(isset($_GET['order'])) {
+            $critere = $_GET['order'];
+            if(isset($_SESSION['series_recherche'])) {
+                $_SESSION['series_recherche'] = $this->orderBy($_SESSION['series_recherche'], $critere);
+            } else {
+                $_SESSION['series_recherche'] = $this->orderBy($_SESSION['series_recherche'], $critere);
+            }
+        }
+
+        foreach ($_SESSION['series_recherche'] as $serie) {
+            $renderer = new SerieRender($serie);
+            $html .= $renderer->render(Renderer::COMPACT);
+        }
+        $html .= '</div>';
 
         return $html;
     }
