@@ -160,15 +160,15 @@ function getTypePublicById($serie_id): array|null
 
 
 
-    // retourne toutes les séries en format compact à completer pour le catalogue (ordre des filtres?)
-    public function getAllSeriesCompact(): array {
+    // retourne toutes les séries
+    public function getAllSeries(): array {
         $series = [];
         $query = "SELECT serie_id FROM serie";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($rows as $row) {
-            $serie = $this->getSerieById($row['serie_id']);
+            $serie = $this->getFullSerieById($row['serie_id']);
             if ($serie !== null) {
                 $series[] = $serie;
             }
