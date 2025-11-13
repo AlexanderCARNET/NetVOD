@@ -57,21 +57,32 @@ class DisplaySerieAction extends Action {
 
             $res="
             <div class='serie-long'>
+            
                 <h1>" . htmlspecialchars($serie->__get('titre')) . "</h1>
                 <h2>Année : " . $serie->__get('annee') . " -
                     Nombres d'épisodes : " . $serie->__get('nbEpisode') . " - 
                     Ajoutée le " . $serie->__get('dateAjout')->format('Y-m-d') . "</h2>
                 <h3>Genre : $genres | Public : $typePublic</h3>
+                                <img src='" . htmlspecialchars($serie->__get('cheminImage')) . "' alt='Image de la série'>
                 <p>" . htmlspecialchars($serie->__get('descriptif')) . "</p>
                 {$this->form()}
-                <img src='" . htmlspecialchars($serie->__get('cheminImage')) . "' alt='Image de la série'>
+                
             </div>";
 
+             $res .= "<div class='episodes-container'>";
             foreach ($serie->liste as $episode) {
                 $episodeRender = new EpisodeRender($episode);
                 $res.= $episodeRender->render(Renderer::COMPACT);
             }
+            $res .= "</div>";
         }
+
+        $form_noter = new Action_noter(Action_noter::$TYPE_SERIE);
+$res .= $form_noter->execute();
+
+$espaceComm = new Action_displayAvis(Action_displayAvis::$TYPE_SERIE);
+$res .= $espaceComm->execute();
+
         return $res;
     }
 
@@ -97,7 +108,7 @@ class DisplaySerieAction extends Action {
         else{
             $res.="<button type='submit' name='add-serie'>Ajouter aux favoris</button>";
         }
-        return $res."</form";
+        return $res."</form>";
 
     }
 }

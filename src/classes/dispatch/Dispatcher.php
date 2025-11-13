@@ -95,7 +95,7 @@ class Dispatcher
                 <a href="?action=default">Accueil</a> $topLinks
                 </div>
             </nav>
-            <main>
+            <body>
                 $html
             </main>
         </body>

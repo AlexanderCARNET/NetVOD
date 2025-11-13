@@ -18,62 +18,90 @@ class DisplayAccueil extends Action
         return $this->form();
     }
 
-    public function form():string{
-        $res="<form method='GET'><h1>Bienvenue sur NetVOD</h1>";
-        if(!isset($_SESSION['user']))
-            $res.="<p>Regarde tes séries et tes films sans limites et sans publicité avec NetVOD.</p>";
-        if(isset($_SESSION['preferences'])) {
-            $res .= "<section><div class='titre-preferences'><h2>Mes Preferences</h2>";
+    public function form(): string
+    {
+        $res = "<div class='accueil-container'>";
+        $res .= "<h1>Bienvenue sur NetVOD</h1>";
+
+        if (!isset($_SESSION['user'])) {
+            $res .= "<p>Regarde tes séries et tes films sans limites et sans publicité avec NetVOD.</p>";
+        }
+
+        /* ========== MES PRÉFÉRENCES ========== */
+        if (isset($_SESSION['preferences'])) {
+            $res .= "<section class='catalogue-section'>";
+            $res .= "<h2>Mes Préférences</h2><div class='catalogue'>";
             $series = $_SESSION['preferences']->__get('series');
-            if(!empty($series))
+
+            if (!empty($series)) {
                 foreach ($series as $serie) {
                     $render = new SerieRender($serie);
-                    $res .= "<div>{$render->render(Renderer::COMPACT)}</div>";
+                    $res .= $render->render(Renderer::COMPACT);
                 }
-            else{
-                $res.="<h3>Aucun serie est present dont la liste.</h3>";
+            } else {
+                $res .= "<h3>Aucune série présente dans la liste.</h3>";
             }
-            $res.="</div>";
+
+            $res .= "</div></section>";
         }
-        if(isset($_SESSION['enCours'])) {
-            $res .= "<section><div class='titre-enCours'><h2>En Cours</h2>";
+
+        /* ========== EN COURS ========== */
+        if (isset($_SESSION['enCours'])) {
+            $res .= "<section class='catalogue-section'>";
+            $res .= "<h2>En cours</h2><div class='catalogue'>";
             $series = $_SESSION['enCours']->__get('series');
             $enCours = $_SESSION['enCours'];
-            if(!empty($series))
+
+            if (!empty($series)) {
                 foreach ($series as $serie) {
-                    $res .= "<div class='serie-compact'>
-                <a href='?action=display-episode&id_episode=" . $enCours->getEnCoursSerie($serie) . "'>
-                    <h3>" . htmlspecialchars($serie->__get('titre')) . "</h3>
-                    <img src='" . htmlspecialchars($serie->__get('cheminImage')) . "' alt='Image de la série'>
-                </a>
-            </div>";
+                    $res .= "
+                    <div class='serie-compact'>
+                        <a href='?action=display-episode&id_episode=" . $enCours->getEnCoursSerie($serie) . "'>
+                            <h3>" . htmlspecialchars($serie->__get('titre')) . "</h3>
+                            <img src='" . htmlspecialchars($serie->__get('cheminImage')) . "' alt='Image de la série'>
+                        </a>
+                    </div>";
                 }
-            else{
-                $res.="<h3>Aucun serie est present dont la liste.</h3>";
+            } else {
+                $res .= "<h3>Aucune série présente dans la liste.</h3>";
             }
-            $res.="</div>";
+
+            $res .= "</div></section>";
         }
-        if(isset($_SESSION['dejaVisionnees'])) {
-            $res .= "<section><div class='titre-dejaVisionnees'><h2>Deja Visionnees</h2>";
+
+        /* ========== DÉJÀ VISIONNÉES ========== */
+        if (isset($_SESSION['dejaVisionnees'])) {
+            $res .= "<section class='catalogue-section'>";
+            $res .= "<h2>Déjà visionnées</h2><div class='catalogue'>";
             $series = $_SESSION['dejaVisionnees']->__get('series');
-            if(!empty($series))
+
+            if (!empty($series)) {
                 foreach ($series as $serie) {
                     $render = new SerieRender($serie);
-                    $res .= "<div>{$render->render(Renderer::COMPACT)}</div>";
+                    $res .= $render->render(Renderer::COMPACT);
                 }
-            else{
-                $res.="<h3>Aucun serie est present dont la liste.</h>";
+            } else {
+                $res .= "<h3>Aucune série présente dans la liste.</h3>";
             }
-            $res.="</div>";
+
+            $res .= "</div></section>";
         }
-        $res.="<div class='catalogue'><h2>Catalogue</h2>";
+
+        /* ========== CATALOGUE COMPLET ========== */
+        $res .= "<section class='catalogue-section'>";
+        $res .= "<h2>Catalogue</h2><div class='catalogue'>";
         $repo = Repository::getInstance();
         $series_total = $repo->getAllSeriesCompact();
+
         foreach ($series_total as $serie) {
             $render = new SerieRender($serie);
             $res .= $render->render(Renderer::COMPACT);
         }
-        return $res."</div></section>";
-    }
 
+        $res .= "</div></section>";
+
+        $res .= "</div>"; // fermeture .accueil-container
+
+        return $res;
+    }
 }
