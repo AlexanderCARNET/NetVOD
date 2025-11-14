@@ -163,15 +163,15 @@ function getLibelleById($id_libelle): array|null
 
 
 
-    // retourne toutes les séries en format compact à completer pour le catalogue (ordre des filtres?)
-    public function getAllSeriesCompact(): array {
+    // retourne toutes les séries
+    public function getAllSeries(): array {
         $series = [];
         $query = "SELECT serie_id FROM serie";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($rows as $row) {
-            $serie = $this->getSerieById($row['serie_id']);
+            $serie = $this->getFullSerieById($row['serie_id']);
             if ($serie !== null) {
                 $series[] = $serie;
             }
@@ -253,5 +253,30 @@ function getLibelleById($id_libelle): array|null
             $sql = $this->pdo->prepare("delete from userlistserie where profil_id = :profil and serie_id = :serie and type_liste = 'dejaVisionnees';");
             $sql->execute(['profil'=>$_SESSION['profil']['profil_id'], 'serie'=>$_SESSION['selected_serie']->__get('id')]);
         }
+    }
+    // retourne tous les genres existants dans la base de données
+    public function getAllGenres(): array {
+        $genres = [];
+        $query = "SELECT DISTINCT lib_genre FROM Genre";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($rows as $row) {
+            $genres[] = $row['lib_genre'];
+        }
+        return $genres;
+    }
+
+    // retourne tous les types de public existants dans la base de données
+    public function getAllTypesPublic(): array {
+        $types = [];
+        $query = "SELECT DISTINCT lib_public FROM publicCible";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($rows as $row) {
+            $types[] = $row['lib_public'];
+        }
+        return $types;
     }
 }
