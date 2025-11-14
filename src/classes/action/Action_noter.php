@@ -37,12 +37,12 @@ class Action_noter extends Action
             return $this->dejaNotee();
         }
 
-        switch ($_SERVER['REQUEST_METHOD']) {
-            case 'POST':
-                return $this->methodePOST();
-            default:
-                return $this->methodeGET();
-        }
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'], $_POST['Commentaire'])) {
+    return $this->methodePOST();
+} else {
+    return $this->methodeGET();
+}
+
     }
 
 

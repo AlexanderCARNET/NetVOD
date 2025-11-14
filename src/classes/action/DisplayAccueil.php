@@ -3,8 +3,9 @@
 namespace iutnc\netvod\action;
 
 use iutnc\netvod\renderer\Renderer;
-use iutnc\netvod\renderer\SerieRender;
+use iutnc\netvod\renderer\SerieRenderer;
 use iutnc\netvod\repository\Repository;
+
 
 class DisplayAccueil extends Action
 {
@@ -14,6 +15,7 @@ class DisplayAccueil extends Action
             header('Location: ?action=signin');
             exit();
         }
+
 
         return $this->form();
     }
@@ -35,7 +37,7 @@ class DisplayAccueil extends Action
 
             if (!empty($series)) {
                 foreach ($series as $serie) {
-                    $render = new SerieRender($serie);
+                    $render = new SerieRenderer($serie);
                     $res .= $render->render(Renderer::COMPACT);
                 }
             } else {
@@ -77,7 +79,7 @@ class DisplayAccueil extends Action
 
             if (!empty($series)) {
                 foreach ($series as $serie) {
-                    $render = new SerieRender($serie);
+                    $render = new SerieRenderer($serie);
                     $res .= $render->render(Renderer::COMPACT);
                 }
             } else {
@@ -88,19 +90,54 @@ class DisplayAccueil extends Action
         }
 
         /* ========== CATALOGUE COMPLET ========== */
-        $res .= "<section class='catalogue-section'>";
-        $res .= "<h2>Catalogue</h2><div class='catalogue'>";
         $repo = Repository::getInstance();
-        $series_total = $repo->getAllSeriesCompact();
+        $_SESSION['series_recherche'] = $repo->getAllSeries();
 
-        foreach ($series_total as $serie) {
-            $render = new SerieRender($serie);
-            $res .= $render->render(Renderer::COMPACT);
+            // valeurs actuelles pour rendre le formulaire "sticky"
+            $motClefValue = isset($_GET['mot_clef']) ? htmlspecialchars(trim($_GET['mot_clef']), ENT_QUOTES) : '';
+            $selectedGenre = $_GET['filtre_genre'] ?? '';
+            $selectedPublic = $_GET['filtre_public'] ?? '';
+            $selectedOrder = $_GET['order'] ?? '';
+
+            $res .= '<h1>Catalogue</h1><div class="catalogue">' ;
+            $res .= '<form class="search-form" method="GET">';
+            // obliger pour que le paramètre action soit bien présent lors de la soumission !!!
+            $res .= '<input type="hidden" name="action" value="catalogue">';
+            $res .= '<input type="text" name="mot_clef" placeholder="Chercher une série..." value="' . $motClefValue . '">';
+
+            $res .= '<select name="filtre_genre" placeholder="Filtrer par genre">'
+                    . '<option value="">Tous les genres</option>';
+            foreach ($repo->getAllGenres() as $genre) {
+                $sel = ($selectedGenre === $genre) ? ' selected' : '';
+                $res .= '<option value="' . htmlspecialchars($genre, ENT_QUOTES) . '"' . $sel . '>' . htmlspecialchars($genre) . '</option>';
+            }
+            $res .= '</select>';
+
+            $res .= '<select name="filtre_public" placeholder="Filtrer par public">'
+                    . '<option value="">Tous les publics</option>';
+            foreach ($repo->getAllTypesPublic() as $type) {
+                $sel = ($selectedPublic === $type) ? ' selected' : '';
+                $res .= '<option value="' . htmlspecialchars($type, ENT_QUOTES) . '"' . $sel . '>' . htmlspecialchars($type) . '</option>';
+            }
+            $res .= '</select>';
+
+            $res .= '<select name="order" placeholder="Trier par">'
+                    . '<option value="">Pas de tri</option>';
+            $orders = ['titre' => "Titre", 'dateAjout' => "Date d'ajout", 'nbEpisode' => "Nombre d'épisodes"];
+            foreach ($orders as $val => $label) {
+                $sel = ($selectedOrder === $val) ? ' selected' : '';
+                $res .= '<option value="' . $val . '"' . $sel . '>' . $label . '</option>';
+            }
+            $res .= '</select>';
+
+            $res .= '<input type="submit" value="Rechercher">'
+                  . '</form>';
+            
+        foreach ($_SESSION['series_recherche'] as $serie) {
+            $renderer = new SerieRenderer($serie);
+            $res .= $renderer->render(Renderer::COMPACT);
         }
-
-        $res .= "</div></section>";
-
-        $res .= "</div>"; // fermeture .accueil-container
+        $res .= '</div>';
 
         return $res;
     }
