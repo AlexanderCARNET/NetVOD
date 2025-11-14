@@ -72,11 +72,13 @@ h1, h2, h3 {
 /* ---------- CATALOGUE ---------- */
 .catalogue {
   display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
+  /* autoriser le retour à la ligne des éléments lorsqu'il y en a trop */
+  flex-wrap: wrap;
+  /* laisser le conteneur gérer l'affichage verticalement si nécessaire */
   padding: 30px 50px;
   gap: 25px;
   scroll-behavior: smooth;
+  align-content: flex-start;
 }
 
 .catalogue::-webkit-scrollbar {
@@ -482,7 +484,6 @@ form + p {
 .search-form {
   display: flex;
   gap: 8px;
-  align-items::start;
   margin: 12px 40px;
 }
 
@@ -496,7 +497,6 @@ form + p {
   min-height: 50px;
   border-radius: 10px;
   transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
-  -webkit-appearance: none;
 }
 
 .search-form input[type="text"] {
