@@ -48,7 +48,7 @@ class DisplayCatalogueAction extends Action
 
             $html .= '<select name="order" placeholder="Trier par">'
                     . '<option value="">Pas de tri</option>';
-            $orders = ['titre' => "Titre", 'dateAjout' => "Date d\'ajout", 'nbEpisode' => "Nombre d\'épisodes"];
+            $orders = ['titre' => "Titre", 'dateAjout' => "Date d'ajout", 'nbEpisode' => "Nombre d'épisodes"];
             foreach ($orders as $val => $label) {
                 $sel = ($selectedOrder === $val) ? ' selected' : '';
                 $html .= '<option value="' . $val . '"' . $sel . '>' . $label . '</option>';
