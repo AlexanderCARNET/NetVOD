@@ -25,7 +25,9 @@ class DisplayCatalogueAction extends Action
             $selectedOrder = $_GET['order'] ?? '';
 
             $html = '<h1>Catalogue</h1><div class="catalogue">' ;
-            $html .= '<form class="search-form" method="GET" action="?action=catalogue">';
+            $html .= '<form class="search-form" method="GET">';
+            // obliger pour que le paramètre action soit bien présent lors de la soumission !!!
+            $html .= '<input type="hidden" name="action" value="catalogue">';
             $html .= '<input type="text" name="mot_clef" placeholder="Chercher une série..." value="' . $motClefValue . '">';
 
             $html .= '<select name="filtre_genre" placeholder="Filtrer par genre">'
