@@ -4,7 +4,7 @@ namespace iutnc\netvod\action;
 
 use iutnc\netvod\renderer\EpisodeRender;
 use iutnc\netvod\renderer\Renderer;
-use iutnc\netvod\renderer\SerieRender;
+use iutnc\netvod\renderer\SerieRenderer;
 use iutnc\netvod\repository\Repository;
 
 // Action gérant l'affichage d'une Série
@@ -54,27 +54,8 @@ class DisplaySerieAction extends Action {
 
             $genres = implode(", ", (array)$serie->__get('genre'));
             $typePublic = implode(", ", (array)$serie->__get('typePublic'));
-
-            $res="
-            <div class='serie-long'>
-            
-                <h1>" . htmlspecialchars($serie->__get('titre')) . "</h1>
-                <h2>Année : " . $serie->__get('annee') . " -
-                    Nombres d'épisodes : " . $serie->__get('nbEpisode') . " - 
-                    Ajoutée le " . $serie->__get('dateAjout')->format('Y-m-d') . "</h2>
-                <h3>Genre : $genres | Public : $typePublic</h3>
-                                <img src='" . htmlspecialchars($serie->__get('cheminImage')) . "' alt='Image de la série'>
-                <p>" . htmlspecialchars($serie->__get('descriptif')) . "</p>
-                {$this->form()}
-                
-            </div>";
-
-             $res .= "<div class='episodes-container'>";
-            foreach ($serie->liste as $episode) {
-                $episodeRender = new EpisodeRender($episode);
-                $res.= $episodeRender->render(Renderer::COMPACT);
-            }
-            $res .= "</div>";
+            $render = new SerieRenderer($serie);
+            $res = $render->render(Renderer::LONG);
         }
 
         $form_noter = new Action_noter(Action_noter::$TYPE_SERIE);
