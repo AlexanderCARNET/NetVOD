@@ -254,6 +254,7 @@ function getLibelleById($id_libelle): array|null
             $sql->execute(['profil'=>$_SESSION['profil']['profil_id'], 'serie'=>$_SESSION['selected_serie']->__get('id')]);
         }
     }
+
     // retourne tous les genres existants dans la base de données
     public function getAllGenres(): array {
         $genres = [];
