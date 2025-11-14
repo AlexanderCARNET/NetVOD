@@ -4,7 +4,7 @@ namespace iutnc\netvod\renderer;
 use iutnc\netvod\exception\ExceptionPasNote;
 use iutnc\netvod\video\serie\Serie;
 
-class SerieRender implements Renderer
+class SerieRenderer implements Renderer
 {
     private Serie $serie;
 

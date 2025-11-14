@@ -1,7 +1,7 @@
 <?php
 namespace iutnc\netvod\action;
 
-use iutnc\netvod\renderer\SerieRender;
+use iutnc\netvod\renderer\SerieRenderer;
 use iutnc\netvod\repository\Repository;
 use iutnc\netvod\renderer\Renderer;
 use iutnc\netvod\video\serie\Serie;
@@ -89,7 +89,7 @@ class DisplayCatalogueAction extends Action
         }
 
         foreach ($_SESSION['series_recherche'] as $serie) {
-            $renderer = new SerieRender($serie);
+            $renderer = new SerieRenderer($serie);
             $html .= $renderer->render(Renderer::COMPACT);
         }
         } catch (\Exception $e) {

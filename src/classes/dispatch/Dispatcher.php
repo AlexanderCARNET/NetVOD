@@ -63,8 +63,7 @@ class Dispatcher
                 break;
 
             case "action_displayAvis":
-                $diaplyAvis = new Action_displayAvis();
-                $html = $diaplyAvis->execute();
+                $action = new Action_displayAvis();
                 break;
             case 'catalogue':
                 $action = new DisplayCatalogueAction();

@@ -3,7 +3,7 @@
 namespace iutnc\netvod\action;
 
 use iutnc\netvod\renderer\Renderer;
-use iutnc\netvod\renderer\SerieRender;
+use iutnc\netvod\renderer\SerieRenderer;
 use iutnc\netvod\repository\Repository;
 
 
@@ -37,7 +37,7 @@ class DisplayAccueil extends Action
 
             if (!empty($series)) {
                 foreach ($series as $serie) {
-                    $render = new SerieRender($serie);
+                    $render = new SerieRenderer($serie);
                     $res .= $render->render(Renderer::COMPACT);
                 }
             } else {
@@ -79,7 +79,7 @@ class DisplayAccueil extends Action
 
             if (!empty($series)) {
                 foreach ($series as $serie) {
-                    $render = new SerieRender($serie);
+                    $render = new SerieRenderer($serie);
                     $res .= $render->render(Renderer::COMPACT);
                 }
             } else {
@@ -132,9 +132,9 @@ class DisplayAccueil extends Action
 
             $res .= '<input type="submit" value="Rechercher">'
                   . '</form>';
-                  
+
         foreach ($_SESSION['series_recherche'] as $serie) {
-            $renderer = new SerieRender($serie);
+            $renderer = new SerieRenderer($serie);
             $res .= $renderer->render(Renderer::COMPACT);
         }
         $res .= '</div>';
