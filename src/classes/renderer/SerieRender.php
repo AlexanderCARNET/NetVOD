@@ -16,9 +16,9 @@ class SerieRender implements Renderer
     public function render(int $selecteur): string
     {
         if ($selecteur === self::COMPACT) {
-            try{
+            try {
                 $moy = $this->serie->getNoteMoyenne();
-            }catch (ExceptionPasNote $e){
+            } catch (ExceptionPasNote $e) {
                 $moy = "";
             }
             $html = "
@@ -44,16 +44,16 @@ class SerieRender implements Renderer
                 <img src='" . htmlspecialchars($this->serie->__get('cheminImage')) . "' alt='Image de la série'>
             </div>";
 
-      // Rendu des épisodes liés
-$html .= "<h2>Épisodes</h2>";
-$html .= "<div class='episodes-container'>";
+            // Rendu des épisodes liés
+            $html .= "<h2>Épisodes</h2>";
+            $html .= "<div class='episodes-container'>";
 
-foreach ($this->serie->liste as $episode) {
-    $episodeRender = new EpisodeRender($episode);
-    $html .= $episodeRender->render(self::COMPACT);
-}
+            foreach ($this->serie->liste as $episode) {
+                $episodeRender = new EpisodeRender($episode);
+                $html .= $episodeRender->render(self::COMPACT);
+            }
 
-$html .= "</div>";
+            $html .= "</div>";
 
         } else {
             throw new \Exception("Sélecteur de rendu inconnu : " . $selecteur);
