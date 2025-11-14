@@ -15,13 +15,14 @@ class SerieRenderer implements Renderer
 
     public function render(int $selecteur): string
     {
+        try {
+            $moy = $this->serie->getNoteMoyenne();
+        } catch (ExceptionPasNote $e) {
+            $moy = "";
+        }
         if ($selecteur === self::COMPACT) {
-            try {
-                $moy = $this->serie->getNoteMoyenne();
-            } catch (ExceptionPasNote $e) {
-                $moy = "";
-            }
-            $html = "
+
+            $res = "
             <div class='serie-compact'>
                 <a href='?action=display-serie&id_serie=" . $this->serie->__get('id') . "'>
                     <h3>" . htmlspecialchars($this->serie->__get('titre')) . "</h3>
@@ -33,32 +34,30 @@ class SerieRenderer implements Renderer
             $genres = implode(", ", (array)$this->serie->__get('genre'));
             $typePublic = implode(", ", (array)$this->serie->__get('typePublic'));
 
-            $html = "
+            $res ="
             <div class='serie-long'>
+
                 <h1>" . htmlspecialchars($this->serie->__get('titre')) . "</h1>
                 <h2>Année : " . $this->serie->__get('annee') . " -
-                    Nombres d'épisodes : " . $this->serie->__get('nbEpisode') . " - 
+            Nombres d'épisodes : " . $this->serie->__get('nbEpisode') . " - 
                     Ajoutée le " . $this->serie->__get('dateAjout')->format('Y-m-d') . "</h2>
-                <h3>Genre : $genres | Public : $typePublic</h3>
+                <h3>Genre : $genres | Public : $typePublic | ". ($moy !=="" ? "Note : $moy/5" : 'Pas de note') . "</h3>
+                                <img src='" . htmlspecialchars($this->serie->__get('cheminImage')) . "' alt='Image de la série'>
                 <p>" . htmlspecialchars($this->serie->__get('descriptif')) . "</p>
-                <img src='" . htmlspecialchars($this->serie->__get('cheminImage')) . "' alt='Image de la série'>
+                
             </div>";
 
-            // Rendu des épisodes liés
-            $html .= "<h2>Épisodes</h2>";
-            $html .= "<div class='episodes-container'>";
-
+            $res .= "<div class='episodes-container'>";
             foreach ($this->serie->liste as $episode) {
                 $episodeRender = new EpisodeRender($episode);
-                $html .= $episodeRender->render(self::COMPACT);
+                $res.= $episodeRender->render(Renderer::COMPACT);
             }
-
-            $html .= "</div>";
+            $res .= "</div>";
 
         } else {
             throw new \Exception("Sélecteur de rendu inconnu : " . $selecteur);
         }
 
-        return $html;
+        return $res;
     }
 }
