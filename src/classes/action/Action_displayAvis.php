@@ -4,8 +4,6 @@ namespace iutnc\netvod\action;
 
 use iutnc\netvod\avis\Avis;
 use iutnc\netvod\avis\RendererAvis;
-use iutnc\netvod\Tris\TriNote;
-use iutnc\netvod\video\serie\Serie;
 
 class Action_displayAvis extends Action
 {
