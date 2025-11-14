@@ -123,7 +123,7 @@ class DisplayAccueil extends Action
 
             $res .= '<select name="order" placeholder="Trier par">'
                     . '<option value="">Pas de tri</option>';
-            $orders = ['titre' => "Titre", 'dateAjout' => "Date d'ajout", 'nbEpisode' => "Nombre d'épisodes"];
+            $orders = ['titre' => "Titre", 'dateAjout' => "Date d'ajout", 'nbEpisode' => "Nombre d'épisodes" , 'noteAsc' => "Notes croissantes" , 'noteDsc' => "Notes décroissantes"];
             foreach ($orders as $val => $label) {
                 $sel = ($selectedOrder === $val) ? ' selected' : '';
                 $res .= '<option value="' . $val . '"' . $sel . '>' . $label . '</option>';

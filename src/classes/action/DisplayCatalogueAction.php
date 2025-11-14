@@ -1,6 +1,7 @@
 <?php
 namespace iutnc\netvod\action;
 
+use iutnc\netvod\exception\ExceptionPasNote;
 use iutnc\netvod\renderer\SerieRenderer;
 use iutnc\netvod\repository\Repository;
 use iutnc\netvod\renderer\Renderer;
@@ -48,8 +49,8 @@ class DisplayCatalogueAction extends Action
 
             $html .= '<select name="order" placeholder="Trier par">'
                     . '<option value="">Pas de tri</option>';
-            $orders = ['titre' => "Titre", 'dateAjout' => "Date d'ajout", 'nbEpisode' => "Nombre d'épisodes"];
-            foreach ($orders as $val => $label) {
+        $orders = ['titre' => "Titre", 'dateAjout' => "Date d'ajout", 'nbEpisode' => "Nombre d'épisodes" , 'noteAsc' => "Notes croissantes" , 'noteDsc' => "Notes décroissantes"];
+        foreach ($orders as $val => $label) {
                 $sel = ($selectedOrder === $val) ? ' selected' : '';
                 $html .= '<option value="' . $val . '"' . $sel . '>' . $label . '</option>';
             }
@@ -128,7 +129,11 @@ class DisplayCatalogueAction extends Action
             usort($series, [$this, 'compareDateAjout']);
         } elseif ($critere === 'nbEpisode') {
             usort($series, [$this, 'compareNbEpisodes']);
-        } 
+        } elseif($critere === 'noteAsc') {
+            usort($series, [$this, 'compareNoteAsc']);
+        } elseif($critere === 'noteDsc') {
+            usort($series, [$this, 'compareNoteDsc']);
+        }
             return $series;
     }
 
@@ -146,6 +151,36 @@ class DisplayCatalogueAction extends Action
     public function compareNbEpisodes(Serie $a, Serie $b): int
     {
         return $a->__get('nbEpisode') <=> $b->__get('nbEpisode');
+    }
+
+    public function compareNoteAsc(Serie $a, Serie $b): int
+    {
+        try {
+            $aNote = $a->getNoteMoyenne();
+        } catch (ExceptionPasNote $e){
+            return  1;
+        }
+        try {
+            $bNote = $b->getNoteMoyenne();
+        } catch (ExceptionPasNote $e){
+            return  -1;
+        }
+        return $aNote <=> $bNote;
+    }
+
+    public function compareNoteDsc(Serie $a, Serie $b): int
+    {
+        try {
+            $aNote = $a->getNoteMoyenne();
+        } catch (ExceptionPasNote $e){
+            return  1;
+        }
+        try {
+            $bNote = $b->getNoteMoyenne();
+        } catch (ExceptionPasNote $e){
+            return  -1;
+        }
+        return $bNote <=> $aNote;
     }
 
     public function filterByGenre(array $ListeSeries, string $genre): array
